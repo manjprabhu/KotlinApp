@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //Elvis operator (?:)
+    //For a non null value Elvis will return left side value
     private fun elvisOperator() {
         var x : String? = "null"
 
@@ -58,9 +60,10 @@ class MainActivity : AppCompatActivity() {
         Log.v("Value of Z:",""+z);
     }
 
+    // not-null assertion(!!) operator converts null reference to non null reference and throws NPE if value is null
     private fun nullcheckOperator() {
         var x: String? = null
         val y = x!!.length
-        Log.v("Value of x:",""+x);
+        Log.v("Value of x:",""+y);
     }
 }
