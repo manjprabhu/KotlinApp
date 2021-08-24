@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         add(5, 10)
         addition(12,7)
         nullcheckMethod()
+        elvisOperator()
+        nullcheckOperator()
     }
 
     private fun add(a : Int, b: Int ) {
@@ -40,9 +42,25 @@ class MainActivity : AppCompatActivity() {
        var c: String? ="hello"
         Log.v("Value of C:", ""+c?.length)
 
-        var d: String? = null
-        d = "Not null"
-        Log.v("Value of D:", ""+d.length)
+        var d: String?
+        d = null
+        Log.v("Value of D:", ""+d?.length)
 
+    }
+
+    private fun elvisOperator() {
+        var x : String? = "null"
+
+        var y: String?  = "world"
+
+        var z = x?.length?: -1
+
+        Log.v("Value of Z:",""+z);
+    }
+
+    private fun nullcheckOperator() {
+        var x: String? = null
+        val y = x!!.length
+        Log.v("Value of x:",""+x);
     }
 }
