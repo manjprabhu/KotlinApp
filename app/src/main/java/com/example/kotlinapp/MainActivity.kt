@@ -40,5 +40,9 @@ class MainActivity : AppCompatActivity() {
        var c: String? ="hello"
         Log.v("Value of C:", ""+c?.length)
 
+        var d: String? = null
+        d = "Not null"
+        Log.v("Value of D:", ""+d.length)
+
     }
 }
