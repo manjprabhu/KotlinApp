@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="onClick"
-            type="com.example.kotlinsample.ClickListener" />
-    </data>
+
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +37,6 @@
                 android:id="@+id/add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{()-> onClick.onClick()}"
                 android:text="Add"/>
 
 

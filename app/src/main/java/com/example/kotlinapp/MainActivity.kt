@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         mBinding =  DataBindingUtil.setContentView(this, R.layout.activity_main)
         add(5, 10)
         addition(12,7)
+        nullcheckMethod()
     }
 
     private fun add(a : Int, b: Int ) {
@@ -27,5 +28,11 @@ class MainActivity : AppCompatActivity() {
     private fun addition(x: Int = 100, y:Int = 20) {
         val sum =  x + y;
         Log.v("Sum:", sum.toString())
+    }
+
+    private fun nullcheckMethod() {
+        var a: String? = null
+        Log.v("string value:", ""+a?.length)
+
     }
 }
