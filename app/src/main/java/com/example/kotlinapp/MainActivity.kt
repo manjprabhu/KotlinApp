@@ -32,7 +32,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun nullcheckMethod() {
         var a: String? = null
-        Log.v("string value:", ""+a?.length)
+        Log.v("Value of A:", ""+a?.length)
+
+        var b = "this is test"
+        Log.v("Value of B:", ""+b.length)
+
+       var c: String? ="hello"
+        Log.v("Value of C:", ""+c?.length)
 
     }
 }
