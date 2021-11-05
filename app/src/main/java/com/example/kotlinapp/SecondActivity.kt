@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class SecondActivity: Activity() {
 
@@ -16,10 +15,7 @@ class SecondActivity: Activity() {
 
     override fun onResume() {
         super.onResume()
-//        Toast.makeText(this,"This is second activity", Toast.LENGTH_LONG).show()
-//        download(this)
-        executeTask()
-//        executeTasktwo()
+        executeTaskThreeSequentially(this)
     }
 
     override fun onStart() {
@@ -40,7 +36,7 @@ class SecondActivity: Activity() {
     }
 
     private fun executeTasktwo(){
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).async {
             val one = withContext(Dispatchers.IO) { longRunningTaskOne()}
             val two = withContext(Dispatchers.IO) { longRunningTaskTwo()}
 
@@ -51,14 +47,88 @@ class SecondActivity: Activity() {
         }
     }
 
+    private fun executeTaskThreeSequentially(context: Context) {
+      CoroutineScope(Dispatchers.Main).launch {
+          val current = System.currentTimeMillis();
+          val  one =  longRunningTaskOne()
+          val two = longRunningTaskTwo()
+
+          withContext(Dispatchers.Main) {
+              Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+          }
+      }
+    }
+
+    //spawn the task one
+    //spawn the task two
+    //await on task one
+    //await on task two
+    private fun executeJobParalley(context: Context) {
+        CoroutineScope(Dispatchers.Main).launch {
+
+            val current = System.currentTimeMillis();
+
+            val one = async { longRunningTaskOne() }
+
+            val  two = async { longRunningTaskTwo() }
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context,"${one.await()}, ${two.await()}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    //Below code execute in sequential manner.
+    //spawn the task one
+    //await on task one
+    //spawn the task two
+    //await on task two
+    private fun executeSequentiallyWithAsync(context: Context) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val current = System.currentTimeMillis();
+
+            val one = async { longRunningTaskOne() }.await()
+
+            val  two = async { longRunningTaskTwo() }.await()
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun withContextExecution(context: Context) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val current = System.currentTimeMillis();
+
+            val one  = withContext(Dispatchers.IO) { longRunningTaskOne()}
+            val two  = withContext(Dispatchers.IO) { longRunningTaskTwo()}
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+
     private suspend fun longRunningTaskOne():Int {
-        delay(5000)
+        delay(3000)
         return 100;
     }
 
     private suspend fun longRunningTaskTwo():Int {
-        delay(7000)
+        delay(5000)
         return 50
+    }
+
+    suspend fun fun1(): String {
+        delay(1000)
+        return "hello function1";
+    }
+
+    suspend fun fun2(): String {
+        delay(5000)
+        return "hello funtion2"
     }
 
     private fun download(context: Context) {
