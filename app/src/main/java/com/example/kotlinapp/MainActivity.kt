@@ -24,8 +24,10 @@ class MainActivity : AppCompatActivity() {
 //        elvisOperator()
 //        assertionOperator()
 
-        letWithReturn()
+//        letWithReturn()
+        performwithOperation()
     }
+
 
     private fun add(a: Int, b: Int) {
         val sum = a + b;
@@ -89,6 +91,24 @@ class MainActivity : AppCompatActivity() {
             "Name of the Person is: ${it.name}"
         }
         println("Person  ---:$person")
+    }
+
+    private fun performrunOperation() {
+         Person().run {
+            name  = "XYZ"
+            age = 35
+            return@run "Name of the Person is: ${this.display()}"
+        }
+    }
+
+    fun performwithOperation() {
+        val person = with(Person()) {
+            name = "Testname"
+            age =20
+            "Person name is: $name age is :$age"
+        }
+
+        println(person)
     }
 
 
