@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 //        performwithOperation()
 
         performApply()
+        performapply2()
 
     }
 
@@ -142,6 +143,18 @@ class MainActivity : AppCompatActivity() {
             age = 23
             contactNumber = 23858
             "${display()}"
+        }
+    }
+
+    //apply with null safety
+    private fun performapply2() {
+        val person:Person?=null
+        person?.apply {
+            name = "sdjf"
+            age =324
+            contactNumber = 23572
+            "${display()}"
+
         }
     }
 
