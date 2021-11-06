@@ -25,7 +25,11 @@ class MainActivity : AppCompatActivity() {
 //        assertionOperator()
 
 //        letWithReturn()
-        performwithOperation()
+//        performwithOperation()
+
+        runVswith()
+
+        runVswith1()
     }
 
 
@@ -111,5 +115,26 @@ class MainActivity : AppCompatActivity() {
         println(person)
     }
 
+//    run vs with
+    private fun runVswith() {
+        val person : Person? = null
+        with(person) {
+            this?.name = "mnb"
+            this?.age = 28
+            this?.contactNumber = 23783257
+            this?.display()
+        }
+    }
+
+    //the above function (runVswith) can rewritten using run in less number of lines
+    private fun runVswith1() {
+        val person: Person?=null
+        person?.run {
+            name = "weiot"
+            age = 34
+            contactNumber = 23835
+            " Display: ${display()}"
+        }
+    }
 
 }
