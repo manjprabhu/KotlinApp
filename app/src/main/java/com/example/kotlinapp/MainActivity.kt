@@ -26,10 +26,7 @@ class MainActivity : AppCompatActivity() {
 
 //        letWithReturn()
 //        performwithOperation()
-
-        performApply()
-        performapply2()
-
+        performalso()
     }
 
 
@@ -155,6 +152,14 @@ class MainActivity : AppCompatActivity() {
             contactNumber = 23572
             "${display()}"
 
+        }
+    }
+
+    //also and let are same, diff is also does not accept return statement
+    private fun performalso() {
+        val person = Person().also {
+            it.name = "jsdkf"
+            println("${it.display()}")
         }
     }
 
