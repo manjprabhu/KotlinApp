@@ -17,12 +17,14 @@ class MainActivity : AppCompatActivity() {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val intent = Intent(this, SecondActivity::class.java)
-        startActivity(intent)
+//        startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)
 //        nullcheckMethod()
 //        elvisOperator()
 //        assertionOperator()
+
+        letWithReturn()
     }
 
     private fun add(a: Int, b: Int) {
@@ -70,6 +72,23 @@ class MainActivity : AppCompatActivity() {
         var x: String? = "Hello"
         val y = x!!.length
         Log.v("Value of x:", "" + y);
+    }
+
+    private fun performLetOperation() {
+        Person().let {
+            it.display()
+            it.changeAge()
+            it.displayAge()
+            it.display()
+        }
+    }
+
+
+    private fun letWithReturn() {
+        val person =  Person().let {
+            "Name of the Person is: ${it.name}"
+        }
+        println("Person  ---:$person")
     }
 
 
