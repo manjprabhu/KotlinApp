@@ -27,9 +27,8 @@ class MainActivity : AppCompatActivity() {
 //        letWithReturn()
 //        performwithOperation()
 
-        runVswith()
+        performApply()
 
-        runVswith1()
     }
 
 
@@ -134,6 +133,15 @@ class MainActivity : AppCompatActivity() {
             age = 34
             contactNumber = 23835
             " Display: ${display()}"
+        }
+    }
+
+    private fun performApply() {
+        Person().apply {
+            name = "newname"
+            age = 23
+            contactNumber = 23858
+            "${display()}"
         }
     }
 
