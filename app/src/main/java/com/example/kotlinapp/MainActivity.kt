@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
 //        letWithReturn()
 //        performwithOperation()
-        performalso()
+        smartCast()
     }
 
 
@@ -160,6 +160,16 @@ class MainActivity : AppCompatActivity() {
         val person = Person().also {
             it.name = "jsdkf"
             println("${it.display()}")
+        }
+    }
+
+    //smart cast
+
+    private fun smartCast() {
+        val obj:Any = "this is test string"
+
+        if(obj is String) {
+            println("String length is: ${obj.length}")
         }
     }
 
