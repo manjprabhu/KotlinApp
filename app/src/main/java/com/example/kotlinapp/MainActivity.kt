@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
 //        letWithReturn()
 //        performwithOperation()
-        smartCast()
+        smartcast2()
     }
 
 
@@ -169,6 +169,16 @@ class MainActivity : AppCompatActivity() {
         val obj:Any = "this is test string"
 
         if(obj is String) {
+            println("String length is: ${obj.length}")
+        }
+    }
+
+    private fun smartcast2() {
+        val obj:Any = "this is test strings"
+
+        if(obj !is String) {
+            println("This is not string")
+        } else {
             println("String length is: ${obj.length}")
         }
     }
