@@ -14,9 +14,10 @@ class ThirdActivity : Activity() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        testflowBuilderThree()
+    override fun onResume() {
+        super.onResume()
+
+        flowofBuilder()
     }
 
 
@@ -49,6 +50,19 @@ class ThirdActivity : Activity() {
     }
 
     private fun flowBuilderThree(): Flow<Int> = flowOf(1, 2, 7, 8, 9, 0, 9)
+
+    private fun flowofBuilder() {
+        CoroutineScope(Dispatchers.IO).launch {
+            flowOf(10,4,10,5,6,8,1,34,7)
+                .map {
+                    it * 1
+                }.filter {
+                    it%2 ==0
+                }.collect {
+                    Log.d("Third flowofBuilder:", "$it")
+                }
+        }
+    }
 
     private fun testflowBuilderThree() {
         CoroutineScope(Dispatchers.Default).launch {
