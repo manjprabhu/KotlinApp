@@ -18,4 +18,12 @@ class Person {
         println("NewAge is : $age");
     }
 
+    fun setPersonName(name:String) {
+        this.name = name
+    }
+
+    fun setPersonAge(age:Int) {
+        this.age = age
+    }
+
 }

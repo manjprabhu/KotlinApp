@@ -17,7 +17,9 @@ class ThirdActivity : Activity() {
     override fun onResume() {
         super.onResume()
 
-        flowofBuilder()
+        testScopeFunctionLet()
+
+        withoutLet()
     }
 
 
@@ -53,11 +55,11 @@ class ThirdActivity : Activity() {
 
     private fun flowofBuilder() {
         CoroutineScope(Dispatchers.IO).launch {
-            flowOf(10,4,10,5,6,8,1,34,7)
+            flowOf(10, 4, 10, 5, 6, 8, 1, 34, 7)
                 .map {
                     it * 1
                 }.filter {
-                    it%2 ==0
+                    it % 2 == 0
                 }.collect {
                     Log.d("Third flowofBuilder:", "$it")
                 }
@@ -71,6 +73,24 @@ class ThirdActivity : Activity() {
                 Log.d("Third Three:", "$it")
             }
         }
+    }
+
+
+    private fun testScopeFunctionLet() {
+        Person().let {
+            it.display()
+            it.setPersonName("Hello")
+            it.setPersonAge(30)
+            it.display()
+        }
+    }
+
+    private fun withoutLet() {
+        val person = Person()
+        person.display()
+        person.setPersonName("NEW NAME")
+        person.setPersonAge(78)
+        person.display()
     }
 
 }
