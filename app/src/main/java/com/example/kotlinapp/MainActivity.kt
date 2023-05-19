@@ -7,10 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.kotlinapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 //        smartcast2()
 
         createFlow()
-      runBlocking {
+        CoroutineScope(Dispatchers.IO).launch{
           createHotflow()
       }
 
@@ -45,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mBinding.add.setOnClickListener{
-
             startCollect()
             startCollectHotFlow()
         }
@@ -53,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     fun createFlow():Flow<Int> = flow {
         for(i in 1..100) {
-            kotlinx.coroutines.delay(100)
+            delay(100)
             emit(i)
         }
     }
@@ -69,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     fun startCollectHotFlow() {
         lifecycleScope.launch{
             stFlow.collect{
+
                 Log.d("====>>>>","Start collecting HOT flow $it")
             }
         }
