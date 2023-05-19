@@ -1,14 +1,15 @@
 package com.example.kotlinapp
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class ThirdActivity : Activity() {
+class ThirdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,7 +17,7 @@ class ThirdActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        testScopeFuntionrunTwo()
+        testflowBuilderTwo()
     }
 
 
@@ -34,11 +35,16 @@ class ThirdActivity : Activity() {
     }
 
     private fun testflowBuilderTwo() {
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch {
             flowBuilderTwo().collect {
                 Log.d("Third:", "$it")
             }
         }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            flowBuilderTwo().collect {
+//                Log.d("Third:", "$it")
+//            }
+//        }
     }
 
     private fun flowBuilderTwo(): Flow<Int> = flow {
