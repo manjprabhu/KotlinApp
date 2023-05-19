@@ -16,10 +16,7 @@ class ThirdActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-
-        testScopeFunctionLet()
-
-        withoutLet()
+        testScopeFuntionrun()
     }
 
 
@@ -53,7 +50,7 @@ class ThirdActivity : Activity() {
 
     private fun flowBuilderThree(): Flow<Int> = flowOf(1, 2, 7, 8, 9, 0, 9)
 
-    private fun flowofBuilder() {
+    private fun flowOfBuilder() {
         CoroutineScope(Dispatchers.IO).launch {
             flowOf(10, 4, 10, 5, 6, 8, 1, 34, 7)
                 .map {
@@ -61,7 +58,7 @@ class ThirdActivity : Activity() {
                 }.filter {
                     it % 2 == 0
                 }.collect {
-                    Log.d("Third flowofBuilder:", "$it")
+                    Log.d("Third flowOfBuilder:", "$it")
                 }
         }
     }
@@ -69,7 +66,6 @@ class ThirdActivity : Activity() {
     private fun testflowBuilderThree() {
         CoroutineScope(Dispatchers.Default).launch {
             flowBuilderThree().collect() {
-
                 Log.d("Third Three:", "$it")
             }
         }
@@ -91,6 +87,40 @@ class ThirdActivity : Activity() {
         person.setPersonName("NEW NAME")
         person.setPersonAge(78)
         person.display()
+    }
+
+
+    private fun testScopeFuntionapply() {
+        val person = Person().apply {
+            setPersonName("Name is Apply")
+            setPersonAge(10)
+        }
+        person.display()
+    }
+
+    private fun testScopeFuntionapplyTwo() {
+        val list = mutableListOf<Int>()
+        list.apply {
+            add(10)
+            this.add(20)
+            this.add(30)
+            this.add(6)
+            this.add(8)
+        }.also {
+            println("Print list $it")
+        }.sort()
+        println("Sorted list is $list")
+    }
+
+    private fun testScopeFuntionrun() {
+        val list = mutableListOf(6, 3, 7, 11, 30)
+        val result = list.run {
+            this.add(10)
+            this.add(40)
+            this.add(4)
+            count { it % 2 == 0 }
+        }
+        println("after run $result")
     }
 
 }
