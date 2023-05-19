@@ -16,7 +16,7 @@ class ThirdActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        testScopeFuntionrun()
+        testScopeFuntionrunTwo()
     }
 
 
@@ -122,5 +122,23 @@ class ThirdActivity : Activity() {
         }
         println("after run $result")
     }
+
+    private fun testScopeFuntionrunTwo() {
+        val nameList = mutableListOf<String>()
+        val result = nameList.run {
+            apply {
+                add("One")
+                add("two")
+                add("three")
+                add("four")
+                add("five")
+            }.also {
+                println("Before Final result $it")
+            }
+            count { it.length == 3 }
+        }
+        println("Result List: $result")
+    }
+
 
 }
