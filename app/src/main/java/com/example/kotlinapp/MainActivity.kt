@@ -5,11 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.example.kotlinapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var mBinding: ActivityMainBinding
+
+    val stFlow = MutableStateFlow(67)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val intent = Intent(this, ThirdActivity::class.java)
-        startActivity(intent)
+//        startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)
 //        nullcheckMethod()
@@ -27,6 +34,51 @@ class MainActivity : AppCompatActivity() {
 //        letWithReturn()
 //        performwithOperation()
 //        smartcast2()
+
+        createFlow()
+      runBlocking {
+          createHotflow()
+      }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBinding.add.setOnClickListener{
+
+            startCollect()
+            startCollectHotFlow()
+        }
+    }
+
+    fun createFlow():Flow<Int> = flow {
+        for(i in 1..100) {
+            kotlinx.coroutines.delay(100)
+            emit(i)
+        }
+    }
+
+    fun startCollect() {
+        lifecycleScope.launch {
+            createFlow().collect {
+                Log.d("====>>>>","Start collecting flow $it")
+            }
+        }
+    }
+
+    fun startCollectHotFlow() {
+        lifecycleScope.launch{
+            stFlow.collect{
+                Log.d("====>>>>","Start collecting HOT flow $it")
+            }
+        }
+    }
+
+    suspend fun createHotflow() {
+        for(i in 1..79) {
+            delay(1000)
+            stFlow.emit(i)
+        }
     }
 
 
