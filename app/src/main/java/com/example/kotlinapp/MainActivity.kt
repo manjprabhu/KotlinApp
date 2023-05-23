@@ -7,8 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.kotlinapp.databinding.ActivityMainBinding
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,23 +38,26 @@ class MainActivity : AppCompatActivity() {
 //        performwithOperation()
 //        smartcast2()
 
-        createFlow()
-        CoroutineScope(Dispatchers.IO).launch{
-          createHotflow()
-      }
+//        createFlow()
+//        CoroutineScope(Dispatchers.IO).launch{
+//          createHotflow()
+//      }
+
+        testAlso2()
 
     }
 
+
     override fun onResume() {
         super.onResume()
-        mBinding.add.setOnClickListener{
+        mBinding.add.setOnClickListener {
             startCollect()
             startCollectHotFlow()
         }
     }
 
-    fun createFlow():Flow<Int> = flow {
-        for(i in 1..100) {
+    fun createFlow(): Flow<Int> = flow {
+        for (i in 1..100) {
             delay(100)
             emit(i)
         }
@@ -58,22 +66,22 @@ class MainActivity : AppCompatActivity() {
     fun startCollect() {
         lifecycleScope.launch {
             createFlow().collect {
-                Log.d("====>>>>","Start collecting flow $it")
+                Log.d("====>>>>", "Start collecting flow $it")
             }
         }
     }
 
     fun startCollectHotFlow() {
-        lifecycleScope.launch{
-            stFlow.collect{
+        lifecycleScope.launch {
+            stFlow.collect {
 
-                Log.d("====>>>>","Start collecting HOT flow $it")
+                Log.d("====>>>>", "Start collecting HOT flow $it")
             }
         }
     }
 
     suspend fun createHotflow() {
-        for(i in 1..79) {
+        for (i in 1..79) {
             delay(1000)
             stFlow.emit(i)
         }
@@ -138,15 +146,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun letWithReturn() {
-        val person =  Person().let {
+        val person = Person().let {
             "Name of the Person is: ${it.name}"
         }
         println("Person  ---:$person")
     }
 
     private fun performrunOperation() {
-         Person().run {
-            name  = "XYZ"
+        Person().run {
+            name = "XYZ"
             age = 35
             return@run "Name of the Person is: ${this.display()}"
         }
@@ -155,16 +163,16 @@ class MainActivity : AppCompatActivity() {
     fun performwithOperation() {
         val person = with(Person()) {
             name = "Testname"
-            age =20
+            age = 20
             "Person name is: $name age is :$age"
         }
 
         println(person)
     }
 
-//    run vs with
+    //    run vs with
     private fun runVswith() {
-        val person : Person? = null
+        val person: Person? = null
         with(person) {
             this?.name = "mnb"
             this?.age = 28
@@ -175,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 
     //the above function (runVswith) can rewritten using run in less number of lines
     private fun runVswith1() {
-        val person: Person?=null
+        val person: Person? = null
         person?.run {
             name = "weiot"
             age = 34
@@ -195,10 +203,10 @@ class MainActivity : AppCompatActivity() {
 
     //apply with null safety
     private fun performapply2() {
-        val person:Person?=null
+        val person: Person? = null
         person?.apply {
             name = "sdjf"
-            age =324
+            age = 324
             contactNumber = 23572
             "${display()}"
 
@@ -216,21 +224,53 @@ class MainActivity : AppCompatActivity() {
     //smart cast
 
     private fun smartCast() {
-        val obj:Any = "this is test string"
+        val obj: Any = "this is test string"
 
-        if(obj is String) {
+        if (obj is String) {
             println("String length is: ${obj.length}")
         }
     }
 
     private fun smartcast2() {
-        val obj:Any = "this is test strings"
+        val obj: Any = "this is test strings"
 
-        if(obj !is String) {
+        if (obj !is String) {
             println("This is not string")
         } else {
             println("String length is: ${obj.length}")
         }
     }
 
+    fun ifelse() {
+        val someValue = 0
+        someValue?.also {
+            println("then")
+            null
+        } ?: run {
+            println("else")
+        }
+    }
+
+
+    fun testAlso(): Int {
+        return Random.nextInt(100).also {
+            println("getRandomInt() generated value $it")
+        }
+    }
+
+    fun testAlso2() {
+        val numberList = mutableListOf(5, 8, 11)
+
+        numberList.also {
+            println("Populating the list")
+        }.apply {
+            add(2)
+            add(3)
+            add(10)
+        }.also {
+            println("Sorting the list")
+        }.count()
+
+        println("====>> Count ${numberList.size}")
+    }
 }
