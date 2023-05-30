@@ -8,7 +8,9 @@ class ScopeFunctionDemo : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performAlsoOperation()
+        performWithOperationWithNull()
+        performRunOperationWithNull()
+        performLetOperationWithNull()
 
     }
 
@@ -61,12 +63,14 @@ class ScopeFunctionDemo : Activity() {
 
     private fun performWithOperationWithNull() {
         val p: Person? = null
-        with(p) {
+        val x = with(p) {
             this?.name = "NULL NAME"
             this?.age = 10
             this?.contactNumber = 3288932
             this?.displayInfo()
         }
+
+        println("With ==>> $x")
     }
 
     private fun performRunOperationWithNull() {
@@ -77,8 +81,18 @@ class ScopeFunctionDemo : Activity() {
             contactNumber = 3288932
             displayInfo()
         }
-
         println("==>> $x")
+    }
+
+    private fun performLetOperationWithNull() {
+        val p: Person? = null
+        val x = p?.let { pr ->
+            pr.name = "RUN NULL NAME"
+            pr.age = 10
+            pr.contactNumber = 3288932
+            pr.displayInfo()
+        }
+        println("LET ==>> $x")
     }
 
     private fun performAlsoOperation() {
