@@ -8,9 +8,7 @@ class ScopeFunctionDemo : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performWithOperationWithNull()
-        performRunOperationWithNull()
-        performLetOperationWithNull()
+        performLetOperationFour()
 
     }
 
@@ -103,5 +101,19 @@ class ScopeFunctionDemo : Activity() {
             "==>> Modified name is: $name\n"
         }
         print(name)
+    }
+
+    private fun performLetOperationFour() {
+        val str: String? = "This is test string"
+        //below 2 lines cause NPE
+//        println(str!!.length)
+//        println(str!!.reversed())
+
+        val result = str?.let {
+            println(it.length)
+            println(it.reversed())
+        }
+
+        println(result)
     }
 }
