@@ -1,5 +1,7 @@
 package com.example.kotlinapp
 
+import android.util.Log
+
 class Person {
 
     var name ="ABC"
@@ -7,8 +9,12 @@ class Person {
     var contactNumber= 875382589
 
     fun display() {
-        println("Name: $name  Age: $age   ContactNumber:$contactNumber")
+        Log.d("TAG","Name: $name  Age: $age   ContactNumber: $contactNumber")
     }
+
+    fun displayInfo()  = print("\n ==>>> Name: $name\n " +
+            "Contact Number: $contactNumber\n " +
+            "age: $age")
 
     fun changeAge() {
         age += 5;
