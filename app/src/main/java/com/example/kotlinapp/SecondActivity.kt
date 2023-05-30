@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.*
 
 class SecondActivity: Activity() {
@@ -22,8 +23,12 @@ class SecondActivity: Activity() {
         super.onStart()
     }
 
+    fun testLaunch() {
+
+    }
+
     private fun executeTask() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).async() {
             val one = async {  longRunningTaskOne()}
             val two= async { longRunningTaskTwo() }
 
@@ -132,7 +137,7 @@ class SecondActivity: Activity() {
     }
 
     private fun download(context: Context) {
-        Toast.makeText(this,"Insode download task",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Inside download task",Toast.LENGTH_LONG).show();
         CoroutineScope(Dispatchers.IO).launch {
             val fCount = async(Dispatchers.IO) { fileCount() }
             val cCount = async(Dispatchers.IO) { charCount() }
