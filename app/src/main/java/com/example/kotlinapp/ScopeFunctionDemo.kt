@@ -8,8 +8,7 @@ class ScopeFunctionDemo : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performApplyOperationWithNull()
-        performRunOperationWithNull()
+        performAlsoOperation()
 
     }
 
@@ -80,5 +79,15 @@ class ScopeFunctionDemo : Activity() {
         }
 
         println("==>> $x")
+    }
+
+    private fun performAlsoOperation() {
+        val name = Person().also { currentPerson ->
+            print("==>> Current name is: ${currentPerson.name}\n")
+            currentPerson.name = "XYZ"
+        }.run {
+            "==>> Modified name is: $name\n"
+        }
+        print(name)
     }
 }
