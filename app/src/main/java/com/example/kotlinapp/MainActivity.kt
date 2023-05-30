@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val intent = Intent(this, ThirdActivity::class.java)
-//        startActivity(intent)
+        val intent = Intent(this, CoroutineDemo::class.java)
+        startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)
 //        nullcheckMethod()
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 //          createHotflow()
 //      }
 
-        testAlso2()
 
     }
 

@@ -20,6 +20,10 @@
         <activity android:name=".SecondActivity"/>
 
         <activity android:name=".ThirdActivity"/>
+
+        <activity android:name=".ScopeFunctionDemo"/>
+
+        <activity android:name=".CoroutineDemo"/>
     </application>
 
 </manifest>

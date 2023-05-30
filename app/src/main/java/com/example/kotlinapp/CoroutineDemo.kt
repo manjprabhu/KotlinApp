@@ -13,7 +13,7 @@ class CoroutineDemo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coroutineScopeOne()
+        performRunBlockingTwo()
     }
 
     private fun coroutineScopeOne() {
@@ -33,11 +33,33 @@ class CoroutineDemo : AppCompatActivity() {
         }
     }
 
+    private fun performRunBlocking() {
+        runBlocking {
+            println("==>> Started running run bloking block.........")
+            delay(10000)
+            println("==>> Done run blocking...")
+        }
+        println("==>> Outside runblocking.....")
+    }
+
+    private fun performRunBlockingTwo() {
+        runBlocking {
+            println("==>> Started running run blocking block.........")
+            launch {
+                delay(1000)
+                println("==>> Inside launch.........")
+            }
+            println("==>>Outside Launch.........")
+        }
+
+        println("==>> End running run blocking block.........")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
-      //this will cancel both the job inside the scope
-        if(scope.isActive) {
+        //this will cancel both the job inside the scope
+        if (scope.isActive) {
             scope.cancel()
         }
         //this will cancel only job2
