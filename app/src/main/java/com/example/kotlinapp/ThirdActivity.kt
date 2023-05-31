@@ -4,21 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class ThirdActivity : AppCompatActivity() {
 
+    val sFlow = MutableStateFlow(0)
+
+    private val _tickFlow = MutableSharedFlow<Int>(replay = 0)
+    val tickFlow: SharedFlow<Int> = _tickFlow
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        runBlocking {
+            performStateFlowOperation()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        getColdFlow()
+        testShareIn()
     }
 
 
@@ -170,6 +175,46 @@ class ThirdActivity : AppCompatActivity() {
             numberFlowCollect.collect {
                 Log.d("==>> 2nd collector:", "$it")
             }
+        }
+    }
+
+    private suspend fun performStateFlowOperation() {
+        for (i in 1..10)
+            sFlow.emit(i)
+    }
+
+    private fun stateFlowTest() {
+        lifecycleScope.launchWhenResumed {
+            sFlow.collect {
+                Log.d("TAG", "==>> $it")
+            }
+        }
+    }
+
+    private fun shareInOperation(): SharedFlow<Int> {
+        val list = flow {
+            for (i in 1..10) {
+                delay(100)
+                emit(i)
+            }
+
+        }
+        return list.shareIn(
+            CoroutineScope(Dispatchers.IO),
+            started = SharingStarted.WhileSubscribed(),
+            replay = 0
+        )
+    }
+
+    private fun testShareIn() {
+        val value = shareInOperation()
+
+        lifecycleScope.launchWhenStarted {
+            value.collect{
+                Log.d("TAG","First Collector ==>>> $it")
+            }
+
+
         }
     }
 }
