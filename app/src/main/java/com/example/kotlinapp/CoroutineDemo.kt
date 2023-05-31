@@ -13,7 +13,7 @@ class CoroutineDemo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        performRunBlockingTwo()
+        performLaunchExceptionOperation()
     }
 
     private fun coroutineScopeOne() {
@@ -68,4 +68,53 @@ class CoroutineDemo : AppCompatActivity() {
 //            job2.cancel()
 //        }
     }
+
+
+    private fun performLaunchOperation() {
+        scope = CoroutineScope(Dispatchers.IO)
+        val job = scope.launch {
+            Log.d("TAG", "==>> Inside launched coroutine")
+            return@launch
+        }
+    }
+
+    private fun performAsyncOperation() {
+        scope = CoroutineScope(Dispatchers.IO)
+
+        val result = scope.async {
+            val list = mutableListOf<Int>(10, 3, 4, 66)
+            return@async list.size
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Log.d("TAG", "==>> ${result.await()}")
+        }
+    }
+
+    private fun performLaunchExceptionOperation() {
+        Log.d("TAG", "==>> performLaunchExceptionOperation()")
+        scope = CoroutineScope(Dispatchers.IO)
+        val job = scope.launch {
+            try {
+                exceptionDemo()
+            } catch (e: Exception) {
+                Log.d("TAG", "==>> Exception occured: ${e.printStackTrace()}")
+            }
+
+        }
+    }
+
+    private fun performAsyncExceptionOperation() {
+        Log.d("TAG", "==>> performAsyncExceptionOperation()")
+        scope = CoroutineScope(Dispatchers.IO)
+        val deferred = scope.async {
+            exceptionDemo()
+        }
+    }
+
+    private fun exceptionDemo() {
+        throw Exception("exceptionDemo")
+    }
+
+
 }
