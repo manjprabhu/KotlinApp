@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -17,7 +18,7 @@ class ThirdActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        testflowBuilderTwo()
+        getColdFlow()
     }
 
 
@@ -49,7 +50,7 @@ class ThirdActivity : AppCompatActivity() {
 
     private fun flowBuilderTwo(): Flow<Int> = flow {
         for (i in 1..10) {
-            kotlinx.coroutines.delay(100)
+            delay(100)
             emit(i)
         }
     }
@@ -147,7 +148,28 @@ class ThirdActivity : AppCompatActivity() {
     }
 
 
+    //Cold flow
 
+    fun getNumbersColdFlow(): Flow<Int> = flow {
+        for (i in 1..10) {
+            delay(1000)
+            emit(i)
+        }
+    }
 
+    private fun getColdFlow() {
+        val numberFlowCollect = getNumbersColdFlow()
 
+        lifecycleScope.launch {
+            numberFlowCollect.collect {
+                Log.d("==>>  First collector:", "$it")
+            }
+
+            delay(2000)
+
+            numberFlowCollect.collect {
+                Log.d("==>> 2nd collector:", "$it")
+            }
+        }
+    }
 }
