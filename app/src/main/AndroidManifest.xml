@@ -23,7 +23,9 @@
         <activity android:name=".ThirdActivity" />
         <activity android:name=".ScopeFunctionDemo" />
         <activity android:name=".CoroutineDemo" />
+        <activity android:name=".FlowExceptionHandling"/>
         <activity android:name=".FourthActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
