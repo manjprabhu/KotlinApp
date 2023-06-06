@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinApp">
+        <activity
+            android:name=".FlowBuilder"
+            android:exported="false" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,14 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SecondActivity" />
+        <activity android:name=".ThirdActivity" />
+        <activity android:name=".ScopeFunctionDemo" />
+        <activity android:name=".CoroutineDemo" />
+        <activity android:name=".FourthActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".SecondActivity"/>
-
-        <activity android:name=".ThirdActivity"/>
-
-        <activity android:name=".ScopeFunctionDemo"/>
-
-        <activity android:name=".CoroutineDemo"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

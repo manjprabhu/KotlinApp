@@ -3,8 +3,10 @@ package com.example.kotlinapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlin.coroutines.EmptyCoroutineContext
 
 class FlowBuilder : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +16,7 @@ class FlowBuilder : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        performTerminalOperatorOperation()
+        performLaunchInOperation()
     }
 
     private fun performFlowBuilderOperation() {
@@ -78,11 +80,40 @@ class FlowBuilder : AppCompatActivity() {
                 accumlator * emittedValue
             }
             println("==>> Fold: $fold")
+        }
+    }
 
+    private fun performLaunchInOperation() {
+
+        val flowOne = flow {
+
+            emit(1)
+            println("==>> Emitted value One")
+            delay(500)
+
+            emit(2)
+            println("==>> Emitted value Two")
+            delay(500)
         }
 
+        val scope = CoroutineScope(EmptyCoroutineContext)
 
+        flowOne
+            .onEach { println("==>> LaunchIn element is $it -One") }
+            .launchIn(scope)
 
+        flowOne.onEach { println("==>>>  LaunchIn element is $it - two") }
+            .launchIn(scope)
+
+        lifecycleScope.launchWhenResumed {
+            flowOne.collect {
+                println("==>> Collected $it element -One")
+            }
+
+            flowOne.collect {
+                println("==>> Collected $it element -Two")
+            }
+        }
     }
 
 }
