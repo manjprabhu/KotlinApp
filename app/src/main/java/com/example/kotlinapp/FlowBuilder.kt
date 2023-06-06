@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 class FlowBuilder : AppCompatActivity() {
@@ -16,7 +17,7 @@ class FlowBuilder : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        performLaunchInOperation()
+        performIntermediateOperator()
     }
 
     private fun performFlowBuilderOperation() {
@@ -116,5 +117,75 @@ class FlowBuilder : AppCompatActivity() {
         }
     }
 
+    private fun performIntermediateOperator() {
+
+        lifecycleScope.launch {
+            flowOf(1, 2, 3, 4, 5, 6, 7)
+                .map {
+                    it * 10
+                }.collect {
+                    println("==>> map operator $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5, 6, 7)
+                .mapNotNull { it * 2 }
+                .collect {
+                    println("==>> map operator two $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5, 6)
+                .filter { it > 2 }
+                .collect {
+                    println("==>> Filter Operator : $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5)
+                .filterNot { it < 2 }.collect {
+                    println("==>>> Filter two $it")
+                }
+
+            flowOf(1, 2, 3, 4, 6, 7, 8)
+                .take(3)
+                .collect {
+                    println("==>> Take : $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5, 6, 7)
+                .takeWhile { it > 2 }
+                .collect {
+                    println("==>> Takewhile $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5, 6, 7)
+                .drop(2)
+                .collect {
+                    println("==>> Drop : $it")
+                }
+
+            flowOf(1, 2, 3, 4, 5, 6, 7)
+                .dropWhile { it < 2 }
+                .collect {
+                    println("==>> DropWhile : $it")
+                }
+
+            flowOf(1, 1, 2, 3, 4, 5, 6, 7)
+                .distinctUntilChanged()
+                .collect {
+                    println("==>> distinctUntilChanged : $it")
+                }
+
+
+            flowOf(1, 1, 2, 3, 4, 5, 6, 7)
+                .transform {
+                    emit(it)
+                    emit(it * 2)
+                }
+                .collect {
+                    println("==>> transform : $it")
+                }
+
+
+        }
+    }
 }
 
