@@ -115,7 +115,6 @@ class CoroutineCancellation : AppCompatActivity() {
         val job = launch(Dispatchers.Default) {
 
             repeat(10) { index ->
-
                 if(isActive) {
                     println("==>> Element is two:  $index")
                     Thread.sleep(100)

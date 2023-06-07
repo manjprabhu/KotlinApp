@@ -26,6 +26,7 @@
         <activity android:name=".FlowExceptionHandling"/>
         <activity android:name=".FlowCancellation"/>
         <activity android:name=".CoroutineCancellation"/>
+        <activity android:name=".SharedFlowDemo"/>
         <activity android:name=".FourthActivity">
 
             <intent-filter>
