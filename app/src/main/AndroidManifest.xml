@@ -24,6 +24,7 @@
         <activity android:name=".ScopeFunctionDemo" />
         <activity android:name=".CoroutineDemo" />
         <activity android:name=".FlowExceptionHandling"/>
+        <activity android:name=".FlowCancellation"/>
         <activity android:name=".FourthActivity">
 
             <intent-filter>

@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val intent = Intent(this, FlowExceptionHandling::class.java)
+        val intent = Intent(this, FlowCancellation::class.java)
         startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)
