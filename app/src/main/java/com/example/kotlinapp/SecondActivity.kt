@@ -5,10 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LifecycleCoroutineScope
 import kotlinx.coroutines.*
 
-class SecondActivity: Activity() {
+class SecondActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,7 +15,10 @@ class SecondActivity: Activity() {
 
     override fun onResume() {
         super.onResume()
-        executeTaskThreeSequentially(this)
+
+            executeSequentiallyWithAsync(applicationContext)
+
+
     }
 
     override fun onStart() {
@@ -29,21 +31,21 @@ class SecondActivity: Activity() {
 
     private fun executeTask() {
         CoroutineScope(Dispatchers.IO).async() {
-            val one = async {  longRunningTaskOne()}
-            val two= async { longRunningTaskTwo() }
+            val one = async { longRunningTaskOne() }
+            val two = async { longRunningTaskTwo() }
 
             Log.v(" 1 Download one ", "${one.await()}")
             Log.v("1 Download two ", "${two.await()}")
 
             val total = one.await() + two.await()
-            Log.v("Download","$total")
+            Log.v("Download", "$total")
         }
     }
 
-    private fun executeTasktwo(){
+    private fun executeTasktwo() {
         CoroutineScope(Dispatchers.IO).async {
-            val one = withContext(Dispatchers.IO) { longRunningTaskOne()}
-            val two = withContext(Dispatchers.IO) { longRunningTaskTwo()}
+            val one = withContext(Dispatchers.IO) { longRunningTaskOne() }
+            val two = withContext(Dispatchers.IO) { longRunningTaskTwo() }
 
             Log.v("Download one ", "$one")
             Log.v("Download two ", "$two")
@@ -53,15 +55,19 @@ class SecondActivity: Activity() {
     }
 
     private fun executeTaskThreeSequentially(context: Context) {
-      CoroutineScope(Dispatchers.Main).launch {
-          val current = System.currentTimeMillis();
-          val  one =  longRunningTaskOne()
-          val two = longRunningTaskTwo()
+        CoroutineScope(Dispatchers.Main).launch {
+            val current = System.currentTimeMillis();
+            val one = longRunningTaskOne()
+            val two = longRunningTaskTwo()
 
-          withContext(Dispatchers.Main) {
-              Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
-          }
-      }
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    "${one}, ${two}, ${(System.currentTimeMillis() - current) / 1000}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
 
     //spawn the task one
@@ -75,10 +81,14 @@ class SecondActivity: Activity() {
 
             val one = async { longRunningTaskOne() }
 
-            val  two = async { longRunningTaskTwo() }
+            val two = async { longRunningTaskTwo() }
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context,"${one.await()}, ${two.await()}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "${one.await()}, ${two.await()}, ${(System.currentTimeMillis() - current) / 1000}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -88,16 +98,20 @@ class SecondActivity: Activity() {
     //await on task one
     //spawn the task two
     //await on task two
-    private fun executeSequentiallyWithAsync(context: Context) {
+    private  fun executeSequentiallyWithAsync(context: Context) {
         CoroutineScope(Dispatchers.Main).launch {
             val current = System.currentTimeMillis();
 
             val one = async { longRunningTaskOne() }.await()
 
-            val  two = async { longRunningTaskTwo() }.await()
+            val two = async { longRunningTaskTwo() }.await()
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "${one}, ${two}, ${(System.currentTimeMillis() - current) / 1000}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -106,47 +120,60 @@ class SecondActivity: Activity() {
         CoroutineScope(Dispatchers.Main).launch {
             val current = System.currentTimeMillis();
 
-            val one  = withContext(Dispatchers.IO) { longRunningTaskOne()}
-            val two  = withContext(Dispatchers.IO) { longRunningTaskTwo()}
+            val one = withContext(Dispatchers.IO) { longRunningTaskOne() }
+            val two = withContext(Dispatchers.IO) { longRunningTaskTwo() }
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(context,"${one}, ${two}, ${(System.currentTimeMillis() - current)/1000}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "${one}, ${two}, ${(System.currentTimeMillis() - current) / 1000}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
 
-    private suspend fun longRunningTaskOne():Int {
+    private suspend fun longRunningTaskOne(): Int {
         delay(3000)
         return 100;
     }
 
-    private suspend fun longRunningTaskTwo():Int {
+    private suspend fun longRunningTaskTwo(): Int {
         delay(5000)
         return 50
     }
 
     suspend fun fun1(): String {
-        delay(1000)
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            delay(6000)
+            Log.d("TAG","==>> fun1 ${Thread.currentThread().name}")
+        }
         return "hello function1";
     }
 
     suspend fun fun2(): String {
         delay(5000)
-        return "hello funtion2"
+        Log.d("TAG","==>> fun2 ${Thread.currentThread().name}")
+        return "hello function2"
     }
 
+
     private fun download(context: Context) {
-        Toast.makeText(this,"Inside download task",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Inside download task", Toast.LENGTH_LONG).show();
         CoroutineScope(Dispatchers.IO).launch {
             val fCount = async(Dispatchers.IO) { fileCount() }
             val cCount = async(Dispatchers.IO) { charCount() }
-            Log.v("Download","Thread:"+Thread.currentThread().name)
-            Log.v("Download","${fCount.await()}")
-            Log.v("Download","${cCount.await()}")
+            Log.v("Download", "Thread:" + Thread.currentThread().name)
+            Log.v("Download", "${fCount.await()}")
+            Log.v("Download", "${cCount.await()}")
 
             withContext(Dispatchers.IO) {
-                Toast.makeText(context,"Total: ${fCount.await() + cCount.await()}",Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Total: ${fCount.await() + cCount.await()}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
 //            Toast.makeText(context,"Downloading the count",Toast.LENGTH_LONG).show()
@@ -154,16 +181,28 @@ class SecondActivity: Activity() {
 
     }
 
-    private suspend fun fileCount() : Int {
-        Log.v("Download fileCount" ,"Thread:"+Thread.currentThread().name)
+    private suspend fun fileCount(): Int {
+        Log.v("Download fileCount", "Thread:" + Thread.currentThread().name)
         delay(3000)
         return 100
     }
 
-    private suspend fun charCount() : Int {
-        Log.v("Download charCount" ,"Thread:"+Thread.currentThread().name)
+    private suspend fun charCount(): Int {
+        Log.v("Download charCount", "Thread:" + Thread.currentThread().name)
         delay(7000)
         return 50
+    }
+
+    private fun SuspendDemoOne() {
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val resultOne = fun1()
+            val resultTwo = fun2()
+
+            Log.d("TAG","==>> ${Thread.currentThread().name}")
+
+        }
     }
 
 }

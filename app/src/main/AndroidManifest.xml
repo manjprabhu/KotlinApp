@@ -27,6 +27,7 @@
         <activity android:name=".FlowCancellation"/>
         <activity android:name=".CoroutineCancellation"/>
         <activity android:name=".SharedFlowDemo"/>
+        <activity android:name=".StateFlowDemo"/>
         <activity android:name=".FourthActivity">
 
             <intent-filter>

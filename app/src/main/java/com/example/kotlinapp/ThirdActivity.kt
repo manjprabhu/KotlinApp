@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.math.BigInteger
 
 class ThirdActivity : AppCompatActivity() {
 
@@ -16,16 +17,26 @@ class ThirdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBlocking {
-            performStateFlowOperation()
-        }
+//        runBlocking {
+//            sharedFlowOperation()
+//        }
     }
 
     override fun onResume() {
         super.onResume()
-        testShareIn()
+        testSharedFlow()
+
+        runBlocking {
+            sharedFlowOperation()
+        }
     }
 
+
+    private suspend fun sharedFlowOperation() {
+        for (i in 1..10) {
+            _tickFlow.emit(i)
+        }
+    }
 
     private fun testFlow() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -180,7 +191,7 @@ class ThirdActivity : AppCompatActivity() {
 
     private suspend fun performStateFlowOperation() {
         for (i in 1..10)
-            sFlow.emit(i)
+            sFlow.value = i
     }
 
     private fun stateFlowTest() {
@@ -210,11 +221,44 @@ class ThirdActivity : AppCompatActivity() {
         val value = shareInOperation()
 
         lifecycleScope.launchWhenStarted {
-            value.collect{
-                Log.d("TAG","First Collector ==>>> $it")
+            value.collect {
+                Log.d("TAG", "First Collector ==>>> $it")
             }
-
-
         }
     }
+
+    private fun testSharedFlow() {
+        lifecycleScope.launchWhenStarted {
+            _tickFlow.collect {
+                Log.d("TAG", "testSharedFlow ==>> $it")
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            delay(3000)
+            _tickFlow.collect {
+                Log.d("TAG", " 2testSharedFlow ==>> $it")
+            }
+        }
+
+
+    }
+
+    private fun testFactorialFlow() {
+        val factorial = calculateFactorial(5)
+        lifecycleScope.launchWhenResumed {
+            factorial.collect {
+                println("==>>> ${it}")
+            }
+        }
+    }
+
+    private fun calculateFactorial(value: Int): Flow<BigInteger> = flow {
+        var factorial = BigInteger.ONE
+        for (i in 1..value) {
+            delay(100)
+            factorial = factorial.multiply(BigInteger.valueOf(i.toLong()))
+            emit(factorial)
+        }
+    }.flowOn(Dispatchers.Default)
 }
