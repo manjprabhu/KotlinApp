@@ -28,6 +28,7 @@
         <activity android:name=".CoroutineCancellation"/>
         <activity android:name=".SharedFlowDemo"/>
         <activity android:name=".StateFlowDemo"/>
+        <activity android:name=".coroutineexceptionhandling.CoroutineexceptionhandlerDemo"/>
         <activity android:name=".FourthActivity">
 
             <intent-filter>
