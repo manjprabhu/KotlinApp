@@ -29,14 +29,10 @@
         <activity android:name=".SharedFlowDemo"/>
         <activity android:name=".StateFlowDemo"/>
         <activity android:name=".coroutineexceptionhandling.CoroutineexceptionhandlerDemo"/>
-        <activity android:name=".FourthActivity">
+        <activity android:name=".usecase10.CalculationInBackground"/>
+        <activity android:name=".structuredconcurrency.StructuredConcurrencyDemo"/>
+        <activity android:name=".FourthActivity"/>
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

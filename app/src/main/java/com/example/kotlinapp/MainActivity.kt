@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.kotlinapp.coroutineexceptionhandling.CoroutineexceptionhandlerDemo
 import com.example.kotlinapp.databinding.ActivityMainBinding
+import com.example.kotlinapp.structuredconcurrency.StructuredConcurrencyDemo
+import com.example.kotlinapp.usecase10.CalculationInBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val intent = Intent(this, CoroutineexceptionhandlerDemo::class.java)
+        val intent = Intent(this, StructuredConcurrencyDemo::class.java)
         startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)
