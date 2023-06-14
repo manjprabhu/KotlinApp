@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val intent = Intent(this, ScopingFunctions::class.java)
+        val intent = Intent(this, CoroutineexceptionhandlerDemo::class.java)
         startActivity(intent)
 //        add(5, 10)
 //        addition(12, 7)

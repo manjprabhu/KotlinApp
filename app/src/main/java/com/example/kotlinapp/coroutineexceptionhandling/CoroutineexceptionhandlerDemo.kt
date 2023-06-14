@@ -13,9 +13,18 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        multipleCoroutineOperationTwo()
+        performOperationOne()
     }
 
+
+    fun performOperationOne() {
+
+        val scope = CoroutineScope(Job())
+
+        scope.launch {
+            throw RuntimeException()
+        }
+    }
 
     fun performExceptionHandling() {
 
