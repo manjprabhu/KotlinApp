@@ -13,16 +13,156 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        performOperationOne()
+        operationFive()
     }
 
 
-    fun performOperationOne() {
+    private fun operationOne() = runBlocking {
+        supervisorScope {
+            launch {
+                codeThatCanThrowExceptions()
+            }
+        }
+    }
 
+
+    private fun operationTwo() = runBlocking {
+        try {
+            supervisorScope() {
+                launch {
+                    codeThatCanThrowExceptions()
+                }
+            }
+        } catch (e: Exception) {
+            println("==>> Exception :$e  is caught")
+        }
+    }
+
+    private fun operationThree() = runBlocking {
+        supervisorScope {
+            async {
+                codeThatCanThrowExceptions()
+            }.await()
+        }
+    }
+
+    private fun operationFour() = runBlocking {
+        supervisorScope {
+            val deferred = async {
+                codeThatCanThrowExceptions()
+            }
+
+            launch {
+                try {
+                    deferred.await()
+                } catch (e: Exception) {
+                    println("==>> Exception$e is caught for Async()...")
+                }
+            }
+        }
+    }
+
+    private fun operationFive() = runBlocking {
+        supervisorScope {
+            val deferred = async {
+                codeThatCanThrowExceptions()
+            }
+            try {
+                deferred.await()
+            } catch (e: Exception) {
+                println("==>> Exception$e is caught for Async()...")
+            }
+        }
+
+    }
+
+    private fun operationSix() {
+        val scope = CoroutineScope(Job())
+
+        scope.launch(SupervisorJob()) {
+
+            val job1 = launch {
+                println("==>> Job1 Started...")
+                delay(1000)
+                throw RuntimeException("Thrown from job1")
+                println("==>> Job1 done...")
+            }
+
+            val job2 = launch {
+                println("==>> Job2 Started...")
+                delay(1000)
+                println("==>> Job2 done...")
+            }
+
+        }
+    }
+
+    private fun operationSeven() {
         val scope = CoroutineScope(Job())
 
         scope.launch {
-            throw RuntimeException()
+            supervisorScope {
+                val job1 = launch {
+                    println("==>> Job1 Started...")
+                    delay(1000)
+                    throw RuntimeException("Thrown from job1")
+                    println("==>> Job1 done...")
+                }
+
+                val job2 = launch {
+                    println("==>> Job2 Started...")
+                    delay(1000)
+                    println("==>> Job2 done...")
+                }
+            }
+        }
+    }
+
+
+    private fun exceptionHandlingLaunch() {
+        val scope = CoroutineScope(Job())
+
+        lifecycleScope.launch {
+            try {
+                codeThatCanThrowExceptions()
+            } catch (e: Exception) {
+                println("==>> Launch() Exception Caught in catch block....")
+            }
+        }
+    }
+
+    private fun exceptionHandlingAsync() {
+        val scope = CoroutineScope(Job())
+
+        val deferred = lifecycleScope.async {
+            codeThatCanThrowExceptions()
+        }
+
+        lifecycleScope.launch {
+            try {
+                deferred.await()
+            } catch (e: Exception) {
+                println("==>> Async() Exception Caught in catch block....")
+            }
+        }
+    }
+
+    private fun codeThatCanThrowExceptions() {
+        throw RuntimeException("Custom Exception is thrown")
+    }
+
+    private fun performOperationOneAsync() {
+        val scope = CoroutineScope(SupervisorJob())
+        scope.launch {
+            val deferred = async {
+                throw RuntimeException()
+            }
+
+            try {
+                deferred.await()
+            } catch (e: Exception) {
+                println("==>> Exception Caught in catch block....")
+            }
         }
     }
 
@@ -82,7 +222,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
                 val job3 = async { functionThree() }
 
-                val result= listOf(job1, job2, job3).mapNotNull {
+                val result = listOf(job1, job2, job3).mapNotNull {
                     try {
                         it.await()
                     } catch (e: Exception) {

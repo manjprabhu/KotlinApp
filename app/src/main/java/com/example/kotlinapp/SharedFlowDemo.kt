@@ -27,7 +27,8 @@ class SharedFlowDemo : AppCompatActivity() {
             }
         }
 
-        //Wait for 500ms then start collecting the flow, by this time, already 0,1,2 are emitted and collector will get values from 3
+        //Wait for 500ms then start collecting the flow, by this time,
+        // already 0,1,2 are emitted and collector will get values from 3
         Thread.sleep(500)
 
         scope.launch {

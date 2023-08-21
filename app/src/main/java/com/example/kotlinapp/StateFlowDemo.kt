@@ -11,11 +11,12 @@ class StateFlowDemo : AppCompatActivity() {
         performStateFlowOperation()
     }
 
-    val counter = MutableStateFlow(0)
+    private val counter = MutableStateFlow(0)
 
     private fun performStateFlowOperation() {
 
-        //has problem in case of multiple coroutine if we use stateflow.value to update the state flow instead use update method
+        //has problem in case of multiple coroutine if we use stateflow.value to update
+        // the state flow instead use update method
         lifecycleScope.launch {
             repeat(10000) {
                 launch {
