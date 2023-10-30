@@ -9,7 +9,6 @@ class ScopeFunctionDemo : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         performLetOperationFour()
-
     }
 
     private fun performLetOperation() {
