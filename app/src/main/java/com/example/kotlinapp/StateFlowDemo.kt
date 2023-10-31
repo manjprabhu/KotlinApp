@@ -2,8 +2,11 @@ package com.example.kotlinapp
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 
 class StateFlowDemo : AppCompatActivity() {
     override fun onResume() {
@@ -32,9 +35,37 @@ class StateFlowDemo : AppCompatActivity() {
         lifecycleScope.launch {
 
             repeat(10000) {
-              launch {
+                launch {
 
-              }
+                }
+            }
+        }
+    }
+
+    @OptIn(InternalCoroutinesApi::class)
+    private fun stateFlowDemo() = runBlocking {
+        val mutableFlow = MutableStateFlow<Int>(0)
+        val stateFlow: StateFlow<Int> = mutableFlow
+
+        val mutableStateFlow = MutableStateFlow(0)
+        // Represents this mutable state flow as a read-only state flow.
+        val mStateFlow = mutableStateFlow.asStateFlow()
+
+        val scope = CoroutineScope(Job())
+
+        repeat(25) {
+            mutableFlow.value = it
+        }
+
+        scope.launch {
+            stateFlow.collect {
+                println(it)
+            }
+        }
+
+        scope.launch {
+            stateFlow.collect {
+                println(it)
             }
         }
     }

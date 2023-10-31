@@ -3,10 +3,8 @@ package com.example.kotlinapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 class FourthActivity : AppCompatActivity() {
 
@@ -97,4 +95,27 @@ class FourthActivity : AppCompatActivity() {
     }
 
     private fun getTime(time: Long) = System.currentTimeMillis() - time
+
+    //Sequential execution
+
+    private fun sequentialDemo() = runBlocking {
+        val time = measureTimeMillis {
+            val one = methodOne()
+            val two = methodTwo()
+            println("Sum is : ${one + two}")
+        }
+
+        println("Total time taken for execution is : $time")
+    }
+
+    private suspend fun methodOne(): Int {
+        delay(1000)
+        return 10
+    }
+
+    private suspend fun methodTwo(): Int {
+        delay(1000)
+        return 20
+    }
+
 }

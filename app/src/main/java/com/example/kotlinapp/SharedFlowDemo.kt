@@ -2,15 +2,17 @@ package com.example.kotlinapp
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class SharedFlowDemo : AppCompatActivity() {
 
     private val shareFlow = MutableSharedFlow<Int>()
+
+    private val _mutableSharedFlow = MutableSharedFlow<Int>()
+
+    // Represents this mutable shared flow as a read-only shared flow.
+    val sharedFlow = _mutableSharedFlow.asSharedFlow()
 
     override fun onResume() {
         super.onResume()
@@ -78,6 +80,34 @@ class SharedFlowDemo : AppCompatActivity() {
             sFlow.collect {
                 println("==>> Received at collector : $it")
 
+            }
+        }
+    }
+
+    private fun sharedFloeDemo() {
+        val scope = CoroutineScope(Job() + Dispatchers.Main)
+
+        val mutableSharedFlow = MutableSharedFlow<Int>(replay = 3, extraBufferCapacity = 5)
+        val sharedFlow =  mutableSharedFlow.asSharedFlow()
+
+        scope.launch {
+            repeat(10) {
+                mutableSharedFlow.emit(it)
+                delay(100)
+            }
+        }
+
+        scope.launch {
+            sharedFlow.collect{
+                println(it)
+            }
+        }
+
+        Thread.sleep(300)
+
+        scope.launch {
+            sharedFlow.collect{
+                println("Second collection :$it")
             }
         }
     }
