@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -28,9 +25,9 @@ class ColdFlows : AppCompatActivity() {
         delay(1000)
     }
 
-    private fun coldFlowTwo() : Flow<Int> = flow {
+    private fun coldFlowTwo(): Flow<Int> = flow {
         println("Generate cold flow ....")
-        for(i in 1..10) {
+        for (i in 1..10) {
             emit(i)
             delay(100)
         }
@@ -83,6 +80,8 @@ class ColdFlows : AppCompatActivity() {
     //returning multiple values
     private fun simple(): List<Int> = listOf(1, 2, 3, 5, 6)
 
+    private
+
     fun display() {
         simple().forEach {
             println(it)
@@ -95,4 +94,30 @@ class ColdFlows : AppCompatActivity() {
             delay(100)
         }
     }
+
+
+    //Different flow builders
+
+    private fun builderOne(): Flow<Int> = flow {
+        for (i in 1..10) {
+            emit(i)
+            delay(100)
+        }
+    }
+
+    private fun builderTwo(): Flow<Int> = flowOf(1, 2, 3, 4, 5)
+
+    private fun builderThree(): Flow<Int> = (1..5).asFlow()
+
+    private fun builderFour(): Flow<Int> = flow {
+        (1..10).forEach {
+            emit(it)
+        }
+    }
+
+    private fun simple2(): List<Int> = listOf(1, 2, 3, 5, 6)
+
+    private fun builderFive(): Flow<Int> = simple2().asFlow()
+
+
 }
