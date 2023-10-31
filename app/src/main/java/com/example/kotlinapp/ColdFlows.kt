@@ -28,6 +28,29 @@ class ColdFlows : AppCompatActivity() {
         delay(1000)
     }
 
+    private fun coldFlowTwo() : Flow<Int> = flow {
+        println("Generate cold flow ....")
+        for(i in 1..10) {
+            emit(i)
+            delay(100)
+        }
+    }
+
+    // To demonstrate that flows are cold
+    private fun coldFlowDemo() = runBlocking {
+        println("Started collecting cold flow....")
+        val f = coldFlowTwo()
+        f.collect {
+            println(it)
+        }
+
+        println("Started collecting cold flow again....")
+
+        f.collect {
+            println(it)
+        }
+    }
+
     private fun performColdFlowCancelTest() = runBlocking {
         val job = launch {
             coldFlow().onCompletion {
@@ -54,6 +77,22 @@ class ColdFlows : AppCompatActivity() {
                 }
             }
 
+        }
+    }
+
+    //returning multiple values
+    private fun simple(): List<Int> = listOf(1, 2, 3, 5, 6)
+
+    fun display() {
+        simple().forEach {
+            println(it)
+        }
+    }
+
+    fun methodOne(): Flow<Int> = flow {
+        for (i in 1..10) {
+            emit(i)
+            delay(100)
         }
     }
 }
