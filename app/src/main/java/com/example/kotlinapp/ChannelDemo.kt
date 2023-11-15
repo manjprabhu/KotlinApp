@@ -56,7 +56,6 @@ class ChannelDemo {
             }
         }
 
-
         scope.launch {
             channel.send(Language.java)
             channel.send(Language.python)
@@ -64,7 +63,7 @@ class ChannelDemo {
         }
 
         scope.launch {
-            println(" $channel.isClosedForReceive")
+            println(" $channel.isisClosedForReceive")
             channel.receive()
             channel.receive()
             println(" $channel.isClosedForReceive")
@@ -93,7 +92,21 @@ class ChannelDemo {
                 println("${receiveChannel.receive()}") // this will receive only the last value from channel producer
             }
         }
+    }
 
+    private fun demoTwo() {
+        val scope = CoroutineScope(Job())
+
+        scope.launch {
+            val channel = produce(capacity = Channel.UNLIMITED) {
+                repeat(10) {
+                    send(it)
+                }
+            }
+            for (element in channel) {
+                println(element)
+            }
+        }
     }
 
     enum class Language {
