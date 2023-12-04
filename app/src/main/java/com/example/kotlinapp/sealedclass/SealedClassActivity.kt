@@ -9,18 +9,18 @@ class SealedClassActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
 
-        val error: HttpError = HttpError.notFoundError
+        val error: HttpError = HttpError.NotFoundError
         when (error) {
-            HttpError.notFoundError -> Unit
-            is HttpError.errorThree -> Unit
-            is HttpError.unauthorizedError -> Unit
+            HttpError.NotFoundError -> Unit
+            is HttpError.ErrorThree -> Unit
+            is HttpError.UnauthorizedError -> Unit
         }
 
-        val errorEnum = HttpErrorEnum.errorThree
+        val errorEnum = HttpErrorEnum.ErrorThree
         when (errorEnum) {
-            HttpErrorEnum.unauthorizedError -> TODO()
-            HttpErrorEnum.notFoundError -> TODO()
-            HttpErrorEnum.errorThree -> TODO()
+            HttpErrorEnum.UnauthorizedError -> TODO()
+            HttpErrorEnum.NotFoundError -> TODO()
+            HttpErrorEnum.ErrorThree -> TODO()
         }
     }
 }

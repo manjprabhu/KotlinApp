@@ -1,14 +1,14 @@
 package com.example.kotlinapp.sealedclass
 
-sealed class HttpError(val errorCode: Int) {
+sealed class HttpError {
 
-    data class unauthorizedError(var reason: String) : HttpError(401)
-    object notFoundError : HttpError(404)
-    class errorThree : HttpError(300)
+    data class UnauthorizedError(var reason: String) : HttpError()
+    object NotFoundError : HttpError()
+    object ErrorThree : HttpError()
 }
 
 enum class HttpErrorEnum(val code:Int) {
-    unauthorizedError(401),
-    notFoundError(404),
-    errorThree(100)
+    UnauthorizedError(401),
+    NotFoundError(404),
+    ErrorThree(100)
 }
