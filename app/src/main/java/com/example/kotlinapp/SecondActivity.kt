@@ -2,32 +2,84 @@ package com.example.kotlinapp
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 class SecondActivity : Activity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
-
-            executeSequentiallyWithAsync(applicationContext)
-
-
+        executeThree()
     }
 
-    override fun onStart() {
-        super.onStart()
+    //By default code within the coroutine is executed sequentially
+    private fun sequentialExecution() {
+        runBlocking {
+            println("==>> Main program starts .....")
+
+            val time = measureTimeMillis {
+                val one = greetingOne()
+                val two = greetingTwo()
+                println("==>> $one$two")
+            }
+            println("==>> Task completed in $time ms")
+            println("==>> Main program ends...")
+        }
     }
 
-    fun testLaunch() {
-
+    private suspend fun greetingOne(): String {
+        delay(2000)
+        return "Hello"
     }
+
+    private suspend fun greetingTwo(): String {
+        delay(2000)
+        return "World"
+    }
+
+    // By default this coroutine runs paralley
+    private fun parallelExecutionUsingAsync() {
+        runBlocking {
+            println("==>> Async Main program starts...")
+            val time = measureTimeMillis {
+                val one = async {
+                    greetingOne()
+                }
+
+                val two = async {
+                    greetingTwo()
+                }
+                println("Async Result ==>> ${one.await() + two.await()}")
+            }
+            println("==>> Async Task completed in $time ms")
+            println("==>> Async Main program ends...")
+        }
+    }
+
+
+    //This will run two task sequentially
+    private fun executeThree() {
+        runBlocking {
+            println("==>> 3 Main program started....")
+            val time = measureTimeMillis {
+                val one = async {
+                    greetingOne()
+                }.await()
+
+                val two = async {
+                    greetingTwo()
+                }.await()
+
+                println("==>> 3 Result : ${one + two}")
+            }
+            println("==>> 3 Execution completed in $time ms")
+            println("==>> 3 Main program Ended....")
+        }
+    }
+
+    //************************************************************
 
     private fun executeTask() {
         CoroutineScope(Dispatchers.IO).async() {
@@ -98,7 +150,7 @@ class SecondActivity : Activity() {
     //await on task one
     //spawn the task two
     //await on task two
-    private  fun executeSequentiallyWithAsync(context: Context) {
+    private fun executeSequentiallyWithAsync(context: Context) {
         CoroutineScope(Dispatchers.Main).launch {
             val current = System.currentTimeMillis();
 
@@ -144,17 +196,17 @@ class SecondActivity : Activity() {
         return 50
     }
 
-    suspend fun fun1(): String {
+    private suspend fun fun1(): String {
         CoroutineScope(Dispatchers.Unconfined).launch {
             delay(6000)
-            Log.d("TAG","==>> fun1 ${Thread.currentThread().name}")
+            Log.d("TAG", "==>> fun1 ${Thread.currentThread().name}")
         }
         return "hello function1";
     }
 
-    suspend fun fun2(): String {
+    private suspend fun fun2(): String {
         delay(5000)
-        Log.d("TAG","==>> fun2 ${Thread.currentThread().name}")
+        Log.d("TAG", "==>> fun2 ${Thread.currentThread().name}")
         return "hello function2"
     }
 
@@ -200,7 +252,7 @@ class SecondActivity : Activity() {
             val resultOne = fun1()
             val resultTwo = fun2()
 
-            Log.d("TAG","==>> ${Thread.currentThread().name}")
+            Log.d("TAG", "==>> ${Thread.currentThread().name}")
 
         }
     }
