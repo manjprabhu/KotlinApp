@@ -11,7 +11,8 @@ class SecondActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        executeThree()
+        executeFive()
+        executeSix()
     }
 
     //By default code within the coroutine is executed sequentially
@@ -31,11 +32,13 @@ class SecondActivity : Activity() {
 
     private suspend fun greetingOne(): String {
         delay(2000)
+        println("==>> greetingOne")
         return "Hello"
     }
 
     private suspend fun greetingTwo(): String {
         delay(2000)
+        println("==>> greetingTwo")
         return "World"
     }
 
@@ -79,7 +82,68 @@ class SecondActivity : Activity() {
         }
     }
 
-    //************************************************************
+
+    //Greeting one and two are executed even though we are not using the result
+    private fun executeFour() {
+        runBlocking {
+            println("==>>4  Main Program started....")
+            val time = measureTimeMillis {
+                val one = async {
+                    greetingOne()
+                }
+
+                val two = async {
+                    greetingTwo()
+                }
+            }
+            println("==>> 4 Execution completed in $time ms")
+            println("==>> 4 Main program Ended....")
+        }
+    }
+
+    //Lazily started async, below code runs sequentially
+    private fun executeFive() {
+        runBlocking {
+            println("==>>5  Main Program started....")
+
+            val time = measureTimeMillis {
+                val one = async(start = CoroutineStart.LAZY) {
+                    greetingOne()
+                }
+
+                val two = async(start = CoroutineStart.LAZY) {
+                    greetingTwo()
+                }
+                println(" 5 Result ==>> ${one.await() + two.await()}")
+            }
+            println("==>> 5 Execution completed in $time ms")
+            println("==>> 5 Main program Ended....")
+        }
+    }
+
+    //Below task runs paralley
+    private fun executeSix() {
+        runBlocking {
+            println("==>>6  Main Program started....")
+
+            val time = measureTimeMillis {
+                val one = async(start = CoroutineStart.LAZY) {
+                    greetingOne()
+                }
+
+                val two = async(start = CoroutineStart.LAZY) {
+                    greetingTwo()
+                }
+                one.start()
+                two.start()
+                println(" 6 Result ==>> ${one.await() + two.await()}")
+            }
+            println("==>> 6 Execution completed in $time ms")
+            println("==>> 6 Main program Ended....")
+        }
+    }
+
+//************************************************************
 
     private fun executeTask() {
         CoroutineScope(Dispatchers.IO).async() {
@@ -123,9 +187,9 @@ class SecondActivity : Activity() {
     }
 
     //spawn the task one
-    //spawn the task two
-    //await on task one
-    //await on task two
+//spawn the task two
+//await on task one
+//await on task two
     private fun executeJobParalley(context: Context) {
         CoroutineScope(Dispatchers.Main).launch {
 
@@ -146,10 +210,10 @@ class SecondActivity : Activity() {
     }
 
     //Below code execute in sequential manner.
-    //spawn the task one
-    //await on task one
-    //spawn the task two
-    //await on task two
+//spawn the task one
+//await on task one
+//spawn the task two
+//await on task two
     private fun executeSequentiallyWithAsync(context: Context) {
         CoroutineScope(Dispatchers.Main).launch {
             val current = System.currentTimeMillis();
