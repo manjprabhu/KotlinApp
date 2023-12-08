@@ -11,8 +11,8 @@ class SecondActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        executeFive()
-        executeSix()
+//        runBlockingDemo()
+        coroutineScopeDemo()
     }
 
     //By default code within the coroutine is executed sequentially
@@ -141,6 +141,32 @@ class SecondActivity : Activity() {
             println("==>> 6 Execution completed in $time ms")
             println("==>> 6 Main program Ended....")
         }
+    }
+
+    //Thread is blocked until coroutine is completed execution
+    private fun runBlockingDemo() {
+        runBlocking {
+            launch {
+                println("==>> Main program started...")
+                val one = greetingOne()
+                val two = greetingTwo()
+
+                println("==>> Result ${"$one  $two"}")
+            }
+        }
+        println("==>> Main program Ended...")
+    }
+
+    //Thread is suspended and continue with execution.
+    private fun coroutineScopeDemo() {
+        CoroutineScope(Dispatchers.Main).launch {
+            println("==>> 2 Main program started...")
+            val one = greetingOne()
+            val two = greetingTwo()
+
+            println("==>> 2 Result ${"$one  $two"}")
+        }
+        println("==>>2  Main program Ended...")
     }
 
 //************************************************************
