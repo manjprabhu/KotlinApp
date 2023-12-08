@@ -7,6 +7,10 @@ import kotlinx.coroutines.*
 
 class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
+    val handler = CoroutineExceptionHandler { context, exception ->
+        println("Exception thrown somewhere within parent or child: $exception.")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -14,6 +18,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         operationFive()
+
     }
 
 
@@ -44,6 +49,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
                 codeThatCanThrowExceptions()
             }.await()
         }
+
     }
 
     private fun operationFour() = runBlocking {
@@ -104,14 +110,14 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
             supervisorScope {
                 val job1 = launch {
                     println("==>> Job1 Started...")
-                    delay(1000)
+                    delay(600)
                     throw RuntimeException("Thrown from job1")
                     println("==>> Job1 done...")
                 }
 
                 val job2 = launch {
                     println("==>> Job2 Started...")
-                    delay(1000)
+                    delay(700)
                     println("==>> Job2 done...")
                 }
             }
