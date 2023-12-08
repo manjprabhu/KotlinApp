@@ -1,17 +1,16 @@
 package com.example.kotlinapp
 
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class ColdFlows : AppCompatActivity() {
 
-    override fun onResume() {
-        super.onResume()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        flowCancellation()
     }
 
     private fun coldFlow(): Flow<Int> = flow {
@@ -27,7 +26,8 @@ class ColdFlows : AppCompatActivity() {
 
     private fun coldFlowTwo(): Flow<Int> = flow {
         println("Generate cold flow ....")
-        for (i in 1..10) {
+        val list = intArrayOf(1, 2, 3, 4, 5, 6, 78, 9, 10, 20, 30, 40)
+        for (i in list.indices) {
             emit(i)
             delay(100)
         }
@@ -35,16 +35,27 @@ class ColdFlows : AppCompatActivity() {
 
     // To demonstrate that flows are cold
     private fun coldFlowDemo() = runBlocking {
-        println("Started collecting cold flow....")
+        println("==>> Started collecting cold flow....")
         val f = coldFlowTwo()
         f.collect {
-            println(it)
+            println("1: $it")
         }
 
-        println("Started collecting cold flow again....")
+        println("==>> Started collecting cold flow again....")
 
         f.collect {
-            println(it)
+            println("2: $it")
+        }
+    }
+
+    //Flow will cancelled after 300 ms and only 3 element will be printed...
+    private fun flowCancellation() {
+        runBlocking {
+            withTimeoutOrNull(300) {
+                coldFlowTwo().collect { value ->
+                    println("==>> $value")
+                }
+            }
         }
     }
 

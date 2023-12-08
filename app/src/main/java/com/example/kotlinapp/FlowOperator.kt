@@ -4,13 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.system.measureTimeMillis
 
 class FlowOperator : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        flowTerminalOperator()
-        flowIntermediateOperator()
+//        conflationDemo()
+        processLatestValue()
     }
 
     private fun flowBuilderOne(): Flow<Int> = flow {
@@ -101,7 +102,7 @@ class FlowOperator : AppCompatActivity() {
 
         //Transform operator: Used to transfer the one data type to another
         CoroutineScope(Dispatchers.Main).launch {
-            numberFlow.transform { value -> emit(value+value) }
+            numberFlow.transform { value -> emit(value + value) }
                 .collect { result ->
                     println("==>> result of Transform is : $result")
                 }
@@ -161,5 +162,60 @@ class FlowOperator : AppCompatActivity() {
                 println("==>> Result of take is :$it")
             }
         }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            coldFlow().collect {
+                println(it)
+            }
+        }
+
+
+    }
+
+    private fun coldFlow() = flow {
+        for (i in 1..3) {
+            emit(i)
+            delay(100)
+        }
+    }.flowOn(Dispatchers.Default)
+
+    //We can use a buffer operator on a flow to run emitting code of the simple flow concurrently with collecting code,
+    // as opposed to running them sequentially:
+    //100ms to produce the flow and 300ms to collect the flow, without buffer operator collecting 3 date from flow would have taken 1200 ms
+
+    fun bufferDemo() = runBlocking {
+        CoroutineScope(Job()).launch {
+            coldFlow().buffer().collect { value ->
+                delay(300)
+                println(value)
+            }
+        }
+    }
+
+    //Conflate the emission nd don't process the each and  every item
+    private fun conflationDemo() = runBlocking {
+        val time = measureTimeMillis {
+            CoroutineScope(Job()).launch {
+                coldFlow().conflate().collect { value ->
+                    println("==>> Conflate Collecting value  $value")
+                    delay(300)
+                    println("==>> Done $value")
+                }
+            }
+        }
+        println("==>> 2  Time taken $time")
+    }
+
+    private fun processLatestValue() = runBlocking {
+        val time = measureTimeMillis {
+            CoroutineScope(Job()).launch {
+                coldFlow().collectLatest { value ->
+                    println("==>> collectLatest Collecting value  $value")
+                    delay(300)
+                    println("==>> Done $value")
+                }
+            }
+        }
+        println("==>> 3  Time taken $time")
     }
 }
