@@ -1,6 +1,5 @@
 package com.example.kotlinapp.coroutineexceptionhandling
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
@@ -11,14 +10,128 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
         println("Exception thrown somewhere within parent or child: $exception.")
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
-        operationFive()
+        exceptionHandlingSix()
+    }
 
+
+    //No try-catch to handle the exception, hence app crashes.
+    private fun exceptionHandlingOne() {
+        val topLevelScope = CoroutineScope(Job())
+        topLevelScope.launch {
+            launch {
+                throw RuntimeException("Runtime exception thrown from child coroutine....")
+            }
+        }
+    }
+
+    //No try-catch to handle the exception, hence app crashes. exception propagated upwards..
+    private fun exceptionHandlingTwo() {
+        val topLevelScope = CoroutineScope(Job())
+        topLevelScope.launch {
+            try {
+                launch {
+                    throw RuntimeException("Runtime exception thrown from child coroutine....")
+                }
+            } catch (e: java.lang.RuntimeException) {
+                println("==>> Exception handled at catch block...")
+            }
+        }
+    }
+
+    //coping function coroutineScope{} re-throws exceptions of its failing children instead of propagating them up the job hierarchy.
+    private fun exceptionHandlingThree() {
+        val topLevelScope = CoroutineScope(Job())
+        topLevelScope.launch {
+            try {
+                coroutineScope {
+                    val job1 = launch {
+                        println("==>> Hello from Job1")
+                        throw RuntimeException("Exception thrown from JOB2....")
+                    }
+
+                    val job2 = launch {
+                        delay(100)
+                        println("==>> Hello from job2")
+                    }
+                }
+            } catch (e: java.lang.RuntimeException) {
+                println("==>> Exception handled at catch block...")
+            }
+        }
+    }
+
+
+    //The scoping function supervisorScope{} installs a new independent sub-scope in the job hierarchy with a SupervisorJob as the scope’s job
+    //This new scope does not propagate its exceptions “up the job hierarchy” so it has to handle its exceptions on its own
+    // Coroutines that are started directly from the supervisorScope are top-level coroutines
+
+    private fun exceptionHandlingFour() {
+        val topLevelScope = CoroutineScope(Job())
+        val parent = topLevelScope.launch {
+            val job1 = launch {
+                println("==>> Hello from Job1....")
+            }
+
+            supervisorScope {
+                val job2 = launch {
+                    println("==>> Hello from Job2")
+                    throw RuntimeException("Exception thrown from JOB2....")
+                }
+
+                val job3 = launch {
+                    delay(100)
+                    println("==>> Hello from job3")
+                }
+            }
+        }
+        println("==>> Hello from parent")
+    }
+
+
+    private fun exceptionHandlingFive() {
+        val topLevelScope = CoroutineScope(Job())
+        val parent = topLevelScope.launch {
+            val job1 = launch {
+                println("==>> Hello from Job1....")
+            }
+
+            val scope = CoroutineScope(SupervisorJob())
+
+            val job2 = scope.launch {
+                println("==>> Hello from Job2")
+                throw RuntimeException("Exception thrown from JOB2....")
+            }
+
+            val job3 = scope.launch {
+                delay(100)
+                println("==>> Hello from job3")
+            }
+        }
+        println("==>> Hello from parent")
+    }
+
+
+    private fun exceptionHandlingSix() {
+        val topLevelScope = CoroutineScope(Job())
+        val parent = topLevelScope.launch {
+            val job1 = launch {
+                println("==>> Hello from Job1....")
+            }
+
+            supervisorScope {
+                val job2 = this.launch {
+                    println("==>> Hello from Job2")
+                    throw RuntimeException("Exception thrown from JOB2....")
+                }
+
+                val job3 = this.launch {
+                    println("==>> Hello from job3")
+                }
+            }
+        }
+        println("==>> Hello from parent")
     }
 
 
