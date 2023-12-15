@@ -26,6 +26,11 @@ class HigherOrderFun : AppCompatActivity() {
         println(res) // will print "Number generating"
 
         calculatorDemo()
+
+        val functionName = higherOrderFunctionDemo()
+        functionName("Test User")
+
+
     }
 
     private fun addOne(a: Int, b: Int): Int {
@@ -87,6 +92,17 @@ class HigherOrderFun : AppCompatActivity() {
 
     private fun division(one: Int, two: Int): Int {
         return one / two
+    }
+
+    //Function as return value
+
+    private fun sayHello(name:String) {
+        println("==>> Say Hello to $name")
+    }
+
+    private fun higherOrderFunctionDemo():(name:String) ->Unit {
+        println("==>> Inside higherOrderFunctionDemo")
+        return ::sayHello
     }
 
 }
