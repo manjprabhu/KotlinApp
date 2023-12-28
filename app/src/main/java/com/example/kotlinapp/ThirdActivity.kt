@@ -240,8 +240,6 @@ class ThirdActivity : AppCompatActivity() {
                 Log.d("TAG", " 2testSharedFlow ==>> $it")
             }
         }
-
-
     }
 
     private fun testFactorialFlow() {

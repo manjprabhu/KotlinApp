@@ -135,5 +135,4 @@ class CoroutineBasics : AppCompatActivity() {
             println("Completed all the child coroutine....")
         }
     }
-
 }

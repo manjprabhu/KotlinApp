@@ -73,13 +73,11 @@ class SharedFlowDemo : AppCompatActivity() {
             started = SharingStarted.WhileSubscribed()
         )
 
-
         Thread.sleep(500)
 
         scope.launch {
             sFlow.collect {
                 println("==>> Received at collector : $it")
-
             }
         }
     }
@@ -111,5 +109,4 @@ class SharedFlowDemo : AppCompatActivity() {
             }
         }
     }
-
 }

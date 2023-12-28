@@ -112,7 +112,6 @@ class ScopeFunctionDemo : Activity() {
             println(it.length)
             println(it.reversed())
         }
-
         println(result)
     }
 }

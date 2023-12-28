@@ -40,7 +40,6 @@ class FlowOperator : AppCompatActivity() {
 
 
     //Size limiting operator
-
     private fun operatorDemo() = runBlocking {
         flowBuilderOne().take(5).collect { println(it) }
     }

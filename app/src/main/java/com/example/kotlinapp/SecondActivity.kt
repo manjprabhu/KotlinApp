@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -44,6 +46,8 @@ class SecondActivity : Activity() {
 
     // By default this coroutine runs paralley
     private fun parallelExecutionUsingAsync() {
+
+        lifecycleScope
         runBlocking {
             println("==>> Async Main program starts...")
             val time = measureTimeMillis {
