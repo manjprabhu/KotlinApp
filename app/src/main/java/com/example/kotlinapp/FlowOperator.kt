@@ -46,6 +46,7 @@ class FlowOperator : AppCompatActivity() {
 
     //terminal operator
 
+    //REDUCE Operator
     private fun operatorTwo() = runBlocking {
         val product = flowBuilderOne().reduce { a, b -> a * b }
         println(product)
@@ -54,32 +55,32 @@ class FlowOperator : AppCompatActivity() {
     private fun flowTerminalOperator() {
         val numbersFlow = flowOf(1, 2, 3, 4, 5, 6, 7, 8, 8, 4, 1, 10)
 
-        //First operator
+        //FIRST operator
         CoroutineScope(Dispatchers.Main).launch {
             val first = numbersFlow.first { it % 2 == 0 }
             println("==>> Result of First    ...$first")
         }
 
-        //Collect operator
+        //COLLECT operator
         CoroutineScope(Dispatchers.Main).launch {
             numbersFlow.collect {
                 println("==>> Collect  Elements are ...$it")
             }
         }
 
-        //toList
+        //TOLIST
         CoroutineScope(Dispatchers.Main).launch {
             val numberList = numbersFlow.toList()
             println("==>> Number list is :$numberList")
         }
 
-        //toSet
+        //TOSET
         CoroutineScope(Dispatchers.Main).launch {
             val numberSet = numbersFlow.toSet()
             println("==>> Number set is :$numberSet")
         }
 
-        //Reduce operator: used to aggregate the flow data in some way
+        //REDUCE operator: used to aggregate the flow data in some way
         //e.g to find the sum of all data in a flow
         CoroutineScope(Dispatchers.Main).launch {
             val result = numbersFlow.reduce { accumulator, value -> accumulator + value }
@@ -91,7 +92,7 @@ class FlowOperator : AppCompatActivity() {
     private fun flowIntermediateOperator() {
         val numberFlow = (1..10).asFlow()
 
-        //Map operator
+        //MAP operator
         CoroutineScope(Dispatchers.Main).launch {
             numberFlow.map { it * it }
                 .collect { r ->
@@ -99,7 +100,7 @@ class FlowOperator : AppCompatActivity() {
                 }
         }
 
-        //Transform operator: Used to transfer the one data type to another
+        //TRANSFORM operator: Used to transfer the one data type to another
         CoroutineScope(Dispatchers.Main).launch {
             numberFlow.transform { value -> emit(value + value) }
                 .collect { result ->
@@ -108,7 +109,7 @@ class FlowOperator : AppCompatActivity() {
         }
 
 
-        //Filter operator
+        //FILTER operator
         CoroutineScope(Dispatchers.Main).launch {
             numberFlow.filter { it % 2 == 0 }
                 .collect { r ->
@@ -116,7 +117,7 @@ class FlowOperator : AppCompatActivity() {
                 }
         }
 
-        //zip operator : used to combine multiple flow operator into single flow.
+        //ZIP operator : used to combine multiple flow operator into single flow.
         val flow1 = listOf(0, 2, 4, 6, 8, 10).asFlow()
         val flow2 = flowOf(1, 3, 5, 7, 9, 11)
 
@@ -128,7 +129,7 @@ class FlowOperator : AppCompatActivity() {
             }
         }
 
-        //Combine operator: same as Zip , but difference b/w 2 is combine will emit the value
+        //COMBINE operator: same as Zip , but difference b/w 2 is combine will emit the value
         // as soon as one of the flow emits
         CoroutineScope(Dispatchers.Main).launch {
             flow1.combine(flow2) { a, b ->
@@ -138,7 +139,7 @@ class FlowOperator : AppCompatActivity() {
             }
         }
 
-        //Merge operator: same as Combine , It keeps the order of items as they emitted from flows.
+        //MERGE operator: same as Combine , It keeps the order of items as they emitted from flows.
         // But it doesn’t guarantee the order of items.
         val mergedFlow = merge(flow1, flow2)
 
@@ -148,14 +149,14 @@ class FlowOperator : AppCompatActivity() {
             }
         }
 
-        //Drop : used to drop the first specified values
+        //DROP : used to drop the first specified values
         CoroutineScope(Dispatchers.Main).launch {
             numberFlow.drop(2).collect {
                 println("==>> Result of Drop is :$it")
             }
         }
 
-        //Take : used to take the first specified values
+        //TAKE : used to take the first specified values
         CoroutineScope(Dispatchers.Main).launch {
             numberFlow.take(2).collect {
                 println("==>> Result of take is :$it")
@@ -167,8 +168,6 @@ class FlowOperator : AppCompatActivity() {
                 println(it)
             }
         }
-
-
     }
 
     private fun coldFlow() = flow {

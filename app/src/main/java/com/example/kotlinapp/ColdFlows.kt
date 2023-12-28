@@ -84,7 +84,6 @@ class ColdFlows : AppCompatActivity() {
                     println("==>> Received at Collector2 : $it")
                 }
             }
-
         }
     }
 

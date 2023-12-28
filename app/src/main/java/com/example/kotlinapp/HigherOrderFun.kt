@@ -104,5 +104,4 @@ class HigherOrderFun : AppCompatActivity() {
         println("==>> Inside higherOrderFunctionDemo")
         return ::sayHello
     }
-
 }

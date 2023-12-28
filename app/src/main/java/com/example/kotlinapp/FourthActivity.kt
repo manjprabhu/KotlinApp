@@ -117,5 +117,4 @@ class FourthActivity : AppCompatActivity() {
         delay(1000)
         return 20
     }
-
 }
