@@ -47,7 +47,6 @@ class SecondActivity : Activity() {
     // By default this coroutine runs paralley
     private fun parallelExecutionUsingAsync() {
 
-        lifecycleScope
         runBlocking {
             println("==>> Async Main program starts...")
             val time = measureTimeMillis {
