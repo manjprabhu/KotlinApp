@@ -117,4 +117,19 @@ class FourthActivity : AppCompatActivity() {
         delay(1000)
         return 20
     }
+
+    //Invoke keyword
+
+    private fun displayName(name: String): String {
+        return "Hello $name"
+    }
+
+    private fun invokeDemo() {
+        val greeting = { name: String -> "Hello, $name!" }
+        val msg1 = greeting.invoke("ABC")
+        println("==>> $msg1")
+
+        val msg2 = ::displayName.invoke("XYZ")
+        println("==>> $msg2")
+    }
 }
