@@ -10,7 +10,7 @@ class FourthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        testFunctionParalalley()
+        invokeDemo()
     }
 
 
@@ -127,7 +127,9 @@ class FourthActivity : AppCompatActivity() {
     private fun invokeDemo() {
         val greeting = { name: String -> "Hello, $name!" }
         val msg1 = greeting.invoke("ABC")
+        val msg3 = greeting("LMN")
         println("==>> $msg1")
+        println("==>> $msg3")
 
         val msg2 = ::displayName.invoke("XYZ")
         println("==>> $msg2")

@@ -31,4 +31,12 @@ public class UseCase {
         String paramTwo = s1.paramTwo;
         String paramThree = s1.paramThree;
     }
+
+    private void demoCompanion() {
+        //Without usage of @JvmStatic
+        CompanionClass.myObject.INSTANCE.f();
+
+        // with @JvmStatic
+        CompanionClass.myObject.f();
+    }
 }

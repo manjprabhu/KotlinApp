@@ -12,7 +12,7 @@
         <activity
             android:name=".FlowBuilder"
             android:exported="false" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".interoperability.CompanionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +32,6 @@
         <activity android:name=".usecase10.CalculationInBackground"/>
         <activity android:name=".structuredconcurrency.StructuredConcurrencyDemo"/>
         <activity android:name=".usecase10.ScopingFunctions"/>
-        <activity android:name=".FourthActivity"/>
 
     </application>
 
