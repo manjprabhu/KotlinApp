@@ -11,7 +11,7 @@ class FlowOperator : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        conflationDemo()
-        processLatestValue()
+        collectAndCollectLatest()
     }
 
     private fun flowBuilderOne(): Flow<Int> = flow {
@@ -85,6 +85,30 @@ class FlowOperator : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = numbersFlow.reduce { accumulator, value -> accumulator + value }
             println("==>> Reduce result is  :$result")
+        }
+    }
+
+    private fun collectAndCollectLatest() {
+        val intFlow = flow {
+            (1..5).forEach {
+                delay(50)
+                println("==>> Emitting $it")
+                emit(it)
+            }
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            intFlow.collect {
+                delay(100)
+                println("==>> Collecting $it")
+            }
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            intFlow.collectLatest {
+                delay(100)
+                println("==>> Collecting Latest $it")
+            }
         }
     }
 
