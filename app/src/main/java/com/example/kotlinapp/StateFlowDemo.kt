@@ -21,10 +21,16 @@ class StateFlowDemo : AppCompatActivity() {
         //has problem in case of multiple coroutine if we use stateflow.value to update
         // the state flow instead use update method
         lifecycleScope.launch {
-            repeat(10000) {
+            repeat(100) {
                 launch {
                     counter.value = counter.value + 1
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            counter.collect {
+                println("==>> . Counter  : $it")
             }
         }
         println("==>> Counter : ${counter.value}")

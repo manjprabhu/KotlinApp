@@ -12,6 +12,9 @@ class ThirdActivity : AppCompatActivity() {
 
     val sFlow = MutableStateFlow(0)
 
+    var _stateFlow = MutableStateFlow<Int?>(null)
+    val stateFlow = _stateFlow.asStateFlow()
+
     private val _tickFlow = MutableSharedFlow<Int>(replay = 0)
     val tickFlow: SharedFlow<Int> = _tickFlow
 

@@ -370,4 +370,70 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
         delay(400)
         return "functionThree"
     }
+
+
+    private fun supervisorJobExample() {
+        val scope = CoroutineScope(Job())
+        scope.launch(SupervisorJob()) {
+            launch {
+                delay(600)
+                println("This is First job....")
+            }
+
+            launch {
+                delay(500)
+                println("This is Second job....")
+            }
+
+            launch {
+                println("This is third job....")
+                throw Exception()
+            }
+        }
+    }
+
+    //Working...
+    private fun supervisorJobExampleCorrectWay() {
+        val scope = CoroutineScope(Job())
+        scope.launch() {
+            supervisorScope {
+                launch {
+                    delay(600)
+                    println("This is First job....")
+                }
+
+                launch {
+                    delay(500)
+                    println("This is Second job....")
+                }
+
+                launch {
+                    println("This is third job....")
+                    throw Exception()
+                }
+            }
+
+        }
+    }
+
+    //Working...
+    private fun supervisorJobExampleCorrectWa2y() {
+        val scope = CoroutineScope(Job())
+        val sharedJob = SupervisorJob()
+
+        scope.launch(sharedJob) {
+            delay(600)
+            println("This is First job....")
+        }
+
+        scope.launch(sharedJob) {
+            delay(500)
+            println("This is Second job....")
+        }
+
+        scope.launch(sharedJob) {
+            println("This is third job....")
+            throw Exception()
+        }
+    }
 }
