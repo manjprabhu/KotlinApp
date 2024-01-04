@@ -14,6 +14,7 @@ class SealedClassActivity : AppCompatActivity() {
             HttpError.NotFoundError -> Unit
             is HttpError.ErrorThree -> Unit
             is HttpError.UnauthorizedError -> Unit
+            is HttpError.ErrorFour -> Unit
         }
 
         val errorEnum = HttpErrorEnum.ErrorThree
