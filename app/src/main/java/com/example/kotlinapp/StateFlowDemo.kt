@@ -74,5 +74,6 @@ class StateFlowDemo : AppCompatActivity() {
                 println(it)
             }
         }
+
     }
 }
