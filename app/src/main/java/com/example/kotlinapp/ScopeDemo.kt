@@ -18,7 +18,8 @@ class ScopeDemo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBLockingDemoOne()
+        runBlockingDemoTwo()
+        runBlockingDemoThree()
     }
 
     private suspend fun work(i: Int) {
@@ -169,4 +170,31 @@ class ScopeDemo : AppCompatActivity() {
             println("==>> FOUR **")
         }
     }
+
+    private fun runBlockingDemoTwo() {
+        runBlocking {
+            delay(1000)
+            println("==>> Hello ....")
+        }
+        println("==>> World...")
+    }
+
+    private fun runBlockingDemoThree() {
+        runBlocking {
+            launch {
+                delay(1000)
+                println("==>> Hello **")
+            }
+        }
+        println("==>> World **")
+    }
+
+    private fun runBlockingDemoFour() =
+        runBlocking {
+            launch {
+                delay(1000)
+                println("==>> Hello!!")
+            }
+            println("==>> World!!")
+        }
 }
