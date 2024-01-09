@@ -12,7 +12,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        exceptionHandlingSix()
+        supervisorJobExampleCorrectWay()
     }
 
 
@@ -373,20 +373,42 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
 
     private fun supervisorJobExample() {
+
         val scope = CoroutineScope(Job())
+
         scope.launch(SupervisorJob()) {
             launch {
                 delay(600)
-                println("This is First job....")
+                println("==>> This is First job....")
             }
 
             launch {
                 delay(500)
-                println("This is Second job....")
+                println("==>> This is Second job....")
+            }
+
+            launch() {
+                println("==>> This is third job....")
+                throw Exception()
+            }
+        }
+    }
+
+    private fun supervisorJobExample2() {
+        val scope = CoroutineScope(SupervisorJob())
+        scope.launch {
+            launch {
+                delay(600)
+                println("==>> This is First job....")
             }
 
             launch {
-                println("This is third job....")
+                delay(500)
+                println("==>> This is Second job....")
+            }
+
+            launch() {
+                println("==>> This is third job....")
                 throw Exception()
             }
         }
@@ -394,45 +416,57 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     //Working...
     private fun supervisorJobExampleCorrectWay() {
-        val scope = CoroutineScope(Job())
-        scope.launch() {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("==>> Exception occured $exception")
+        }
+
+        CoroutineScope(Dispatchers.Main+handler).launch {
+
             supervisorScope {
+
                 launch {
                     delay(600)
-                    println("This is First job....")
+                    println("==>> This is First job....")
                 }
 
                 launch {
                     delay(500)
-                    println("This is Second job....")
+                    println("==>> This is Second job....")
                 }
 
                 launch {
-                    println("This is third job....")
+                    println("==>> This is third job....")
                     throw Exception()
                 }
-            }
 
+            }
+            println("==>> parent job completed....")
         }
     }
 
-    //Working...
-    private fun supervisorJobExampleCorrectWa2y() {
-        val scope = CoroutineScope(Job())
-        val sharedJob = SupervisorJob()
 
-        scope.launch(sharedJob) {
+    private fun supervisorJobExampleCorrectWay2() {
+
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("==>> Exception occured $exception")
+        }
+
+
+        val scope = CoroutineScope(SupervisorJob())
+        SupervisorJob()
+
+        scope.launch() {
             delay(600)
-            println("This is First job....")
+            println("==>> This is First job....")
         }
 
-        scope.launch(sharedJob) {
+        scope.launch() {
             delay(500)
-            println("This is Second job....")
+            println("==>> This is Second job....")
         }
 
-        scope.launch(sharedJob) {
-            println("This is third job....")
+        scope.launch(handler) {
+            println("==>> This is third job....")
             throw Exception()
         }
     }
