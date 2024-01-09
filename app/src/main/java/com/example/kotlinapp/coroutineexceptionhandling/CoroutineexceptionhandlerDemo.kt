@@ -12,7 +12,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        supervisorJobExampleCorrectWay()
+        supervisorJobExampleCorrectWay3()
     }
 
 
@@ -420,7 +420,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
             println("==>> Exception occured $exception")
         }
 
-        CoroutineScope(Dispatchers.Main+handler).launch {
+        CoroutineScope(Dispatchers.Main + handler).launch {
 
             supervisorScope {
 
@@ -442,6 +442,35 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
             }
             println("==>> parent job completed....")
         }
+    }
+
+
+    // Another way to handle failure, here we pass supervisorJob() as param to CoroutineScope()
+    //Working
+    private fun supervisorJobExampleCorrectWay3() {
+
+        val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+            println("==>> Handled exception $exception")
+        }
+
+        val parentScope = CoroutineScope(SupervisorJob() + exceptionHandler)
+
+        parentScope.launch {
+            delay(600)
+            println("==>> This is First job....")
+        }
+
+        parentScope.launch {
+            delay(500)
+            println("==>> This is Second job....")
+        }
+
+        parentScope.launch {
+            println("==>> This is third job....")
+            throw Exception()
+        }
+
+        println("==>> Parent job completed....")
     }
 
 
