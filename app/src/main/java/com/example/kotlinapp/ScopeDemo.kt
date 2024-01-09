@@ -18,8 +18,7 @@ class ScopeDemo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        exampleCoroutine()
-        exampleRunBlocking()
+        runBLockingDemoOne()
     }
 
     private suspend fun work(i: Int) {
@@ -109,5 +108,65 @@ class ScopeDemo : AppCompatActivity() {
             }
         }
         println("==>> 5 Time taken is :  $time")
+    }
+
+    private fun repeatCoroutine() {
+        runBlocking {
+            repeat(100) {
+                launch(dispatcher) {
+                    println("==>>> Started Coroutine $it")
+                    delay(10000)
+                    println("==>> Ended Coroutine $it")
+                }
+            }
+        }
+    }
+
+    private fun runBlockingDemo() {
+        runBlocking {
+            launch {
+                delay(1000)
+                println("==>> One")
+            }
+            println("==>> Two")
+        }
+        println("==>> Three")
+        println(" ==>>*************************")
+    }
+
+    private fun runBLockingAndSuspend() {
+        runBlocking {
+            suspendingWork()
+            println("==>>> Two..")
+        }
+        println("==>>> Three..")
+    }
+
+    private suspend fun suspendingWork() {
+        delay(1000)
+        println("==>> One..")
+    }
+
+    private fun runBLockingDemoOne() {
+        runBlocking {
+            suspendingWorkTwo()
+            println("==>> One **")
+        }
+        println("==>> END **")
+    }
+
+    private suspend fun suspendingWorkTwo() {
+        coroutineScope {
+            launch {
+                delay(1000)
+                println("==>> Two **")
+            }
+
+            launch {
+                delay(2000)
+                println("==>> THREE **")
+            }
+            println("==>> FOUR **")
+        }
     }
 }
