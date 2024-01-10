@@ -18,8 +18,8 @@ class ScopeDemo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        runBlockingDemoTwo()
-        runBlockingDemoThree()
+        performWorkGlobalScope()
+        performWorkGlobalScopeFix()
     }
 
     private suspend fun work(i: Int) {
@@ -53,7 +53,7 @@ class ScopeDemo : AppCompatActivity() {
             runBlocking {
                 for (i in 1..10) {
                     launch(Dispatchers.IO) {
-                        workThread(i)
+                        work(i)
                     }
                 }
             }
@@ -66,8 +66,8 @@ class ScopeDemo : AppCompatActivity() {
     // and not in scope of runBLocking(), hence runblocking will not wait for the child coroutine completion..
     private fun performWorkGlobalScope() {
         val time = measureTimeMillis {
-            for (i in 1..2) {
-                runBlocking {
+            runBlocking {
+                for (i in 1..2) {
                     GlobalScope.launch {
                         work(i)
                     }
@@ -75,6 +75,23 @@ class ScopeDemo : AppCompatActivity() {
             }
         }
         println("==>> 3 Time taken is :  $time")
+        println(" ==>>*************************")
+    }
+
+    //GlobalScope.launch creates global coroutine and its developers responsibility to track their lifetime
+    private fun performWorkGlobalScopeFix() {
+        val time = measureTimeMillis {
+            runBlocking {
+                val jobs = mutableListOf<Job>()
+                for (i in 1..10) {
+                    jobs += GlobalScope.launch {
+                        work(i)
+                    }
+                }
+                jobs.forEach { it.join() }
+            }
+        }
+        println("==>> 4 Time taken is :  $time")
         println(" ==>>*************************")
     }
 
