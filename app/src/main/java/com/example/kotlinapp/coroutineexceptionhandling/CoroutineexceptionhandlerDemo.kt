@@ -6,13 +6,9 @@ import kotlinx.coroutines.*
 
 class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
-    val handler = CoroutineExceptionHandler { context, exception ->
-        println("Exception thrown somewhere within parent or child: $exception.")
-    }
-
     override fun onResume() {
         super.onResume()
-        supervisorScopeHandling2()
+        demo()
     }
 
 
@@ -547,4 +543,29 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
             println("==>> Task completed....")
         }
     }
+
+
+    //this will crash , as exception handler only works with top level coroutine
+    private fun demo() {
+        val handler = CoroutineExceptionHandler { _, e -> println("==>> Caught exception $e") }
+        val scope = CoroutineScope(Job())
+
+        scope.launch {
+
+            coroutineScope {
+
+                launch(handler) {// here handler will not have any effect , as this is not root corutine.
+                    delay(100)
+                    throw IllegalArgumentException("A total fiasco!")
+                }
+
+                launch {
+                    delay(200)
+                    println("==>> Hi there!!")
+                }
+            }
+        }
+        println("==>> Task completed....")
+    }
 }
+
