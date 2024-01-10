@@ -1,15 +1,93 @@
 package com.example.kotlinapp
 
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
-class StructuredConcurrency {
+class StructuredConcurrency : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        execute()
+    }
+
+
+    private fun methodOne() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = doWorkTwo()
+            println("==>> Result : $result")
+        }
+    }
+
+    //Example of unStructured concurrency...
+    private fun doWork(): Int {
+        var result = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            (1..10).forEach {
+                delay(1000)
+                result += it
+            }
+        }
+        return result
+    }
+
+    //Example of STRUCTURED concurrency...
+    private suspend fun doWorkTwo(): Int {
+        var result = 0
+        coroutineScope {
+            (1..10).forEach {
+                delay(1000)
+                result += it
+            }
+        }
+        return result
+    }
+
+
+    //Another example of STRUCTURED concurrency...
+    private fun execute() {
+        val time = measureTimeMillis {
+            runBlocking {
+                val sum = calculateSum()
+                println("==>> Sum is : $sum")
+            }
+        }
+        println("==>> Operation completed...")
+        println("==>> Time taken $time")
+    }
+
+    private suspend fun calculateSum(): Int {
+        println("==>> calculateSum")
+        var sum = 0
+        //This is unstructured, here sum =0  is returned even before coroutine are completed.
+       /* CoroutineScope(Job()).launch {
+                val one = async { taskOne() }
+                val two = async { taskTwo() }
+                sum = (one.await() + two.await())
+        }*/
+        //This structured concurrency version of above code
+        coroutineScope {
+            val one = async { taskOne() }
+            val two = async { taskTwo() }
+            sum = (one.await() + two.await())
+        }
+        return sum
+    }
+
+    private suspend fun taskOne(): Int {
+        delay(1000)
+        return 10
+    }
+
+    private suspend fun taskTwo(): Int {
+        delay(2000)
+        return 20
+    }
+//example ends here
 
     fun demoSix() {
         runBlocking {
-
             val request = launch {
                 launch {
                     delay(100L)
