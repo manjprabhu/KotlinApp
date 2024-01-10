@@ -61,17 +61,19 @@ class StructuredConcurrency : AppCompatActivity() {
         println("==>> calculateSum")
         var sum = 0
         //This is unstructured, here sum =0  is returned even before coroutine are completed.
-       /* CoroutineScope(Job()).launch {
+        val scope =CoroutineScope(Job()).launch {
                 val one = async { taskOne() }
                 val two = async { taskTwo() }
                 sum = (one.await() + two.await())
-        }*/
+        }
+        scope.join() // this line makes above code structured concurrent
+
         //This structured concurrency version of above code
-        coroutineScope {
+        /*coroutineScope {
             val one = async { taskOne() }
             val two = async { taskTwo() }
             sum = (one.await() + two.await())
-        }
+        }*/
         return sum
     }
 
