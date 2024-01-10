@@ -12,7 +12,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        supervisorJobExampleCorrectWay3()
+        supervisorScopeHandling2()
     }
 
 
@@ -497,6 +497,54 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
         scope.launch(handler) {
             println("==>> This is third job....")
             throw Exception()
+        }
+    }
+
+    private fun supervisorScopeHandling() {
+        runBlocking {
+            val result = supervisorScope {
+                launch {
+                    delay(100)
+                    try {
+                        throw IllegalArgumentException("A total fiasco!")
+                    } catch (e: Exception) {
+                        println("==>> caught IllegalArgumentException")
+                    }
+                }
+                launch {
+                    delay(200)
+                    println("==>> Hi there!")
+                }
+                "Result!!!"
+            }
+            println("==>> Got result: $result")
+        }
+        println("==>> Task completed....")
+    }
+
+    private fun supervisorScopeHandling2() {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("==>> caught IllegalArgumentException !!!")
+        }
+        runBlocking {
+
+            val result = supervisorScope {
+
+                launch(handler) {
+                    delay(100)
+                    throw IllegalArgumentException("A total fiasco!")
+                }
+
+                launch {
+                    delay(200)
+                    println("==>> Hi there!")
+                }
+
+                "Result!!!"
+            }
+            println("==>> Got result: $result")
+
+            println("==>> Task completed....")
         }
     }
 }
