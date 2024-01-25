@@ -36,7 +36,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
         }
     }
 
-    //coping function coroutineScope{} re-throws exceptions of its failing children instead of propagating them up the job hierarchy.
+    //Scoping function coroutineScope{} re-throws exceptions of its failing children instead of propagating them up the job hierarchy.
     private fun exceptionHandlingThree() {
         val topLevelScope = CoroutineScope(Job())
         topLevelScope.launch {
@@ -59,8 +59,10 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
     }
 
 
-    //The scoping function supervisorScope{} installs a new independent sub-scope in the job hierarchy with a SupervisorJob as the scope’s job
-    //This new scope does not propagate its exceptions “up the job hierarchy” so it has to handle its exceptions on its own
+    //The scoping function supervisorScope{} installs a new independent sub-scope in the job hierarchy
+    // with a SupervisorJob as the scope’s job
+    //This new scope does not propagate its exceptions “up the job hierarchy”
+    // so it has to handle its exceptions on its own
     // Coroutines that are started directly from the supervisorScope are top-level coroutines
 
     private fun exceptionHandlingFour() {
@@ -158,7 +160,6 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
                 codeThatCanThrowExceptions()
             }.await()
         }
-
     }
 
     private fun operationFour() = runBlocking {
@@ -188,7 +189,6 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
                 println("==>> Exception$e is caught for Async()...")
             }
         }
-
     }
 
     private fun operationSix() {
@@ -208,7 +208,6 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
                 delay(1000)
                 println("==>> Job2 done...")
             }
-
         }
     }
 
@@ -554,7 +553,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
 
             coroutineScope {
 
-                launch(handler) {// here handler will not have any effect , as this is not root corutine.
+                launch(handler) {// here handler will not have any effect , as this is not root coroutine.
                     delay(100)
                     throw IllegalArgumentException("A total fiasco!")
                 }
