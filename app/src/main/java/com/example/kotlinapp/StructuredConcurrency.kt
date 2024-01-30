@@ -9,15 +9,22 @@ class StructuredConcurrency : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        execute()
+        methodOne()
     }
 
 
     private fun methodOne() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val result = doWorkTwo()
-            println("==>> Result : $result")
+        val time = measureTimeMillis {
+
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = doWorkTwo()
+                println("==>> Result : $result")
+            }
         }
+
+        println("==>> Operation completed...")
+        println("==>> Time taken $time")
+
     }
 
     //Example of unStructured concurrency...
