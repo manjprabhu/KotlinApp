@@ -9,7 +9,9 @@ class StructuredConcurrency : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        methodOne()
+        demoEight()
+
+        demoNine()
     }
 
 
@@ -68,10 +70,10 @@ class StructuredConcurrency : AppCompatActivity() {
         println("==>> calculateSum")
         var sum = 0
         //This is unstructured, here sum =0  is returned even before coroutine are completed.
-        val scope =CoroutineScope(Job()).launch {
-                val one = async { taskOne() }
-                val two = async { taskTwo() }
-                sum = (one.await() + two.await())
+        val scope = CoroutineScope(Job()).launch {
+            val one = async { taskOne() }
+            val two = async { taskTwo() }
+            sum = (one.await() + two.await())
         }
         scope.join() // this line makes above code structured concurrent
 
@@ -134,6 +136,46 @@ class StructuredConcurrency : AppCompatActivity() {
 
             parent.join()
             println("Completed all the child coroutine....")
+        }
+    }
+
+    private fun demoEight() {
+        val scope = CoroutineScope(Job())
+
+        val job = scope.launch {
+            scope.launch {
+                delay(100)
+                println("==>>> Hello One....")
+            }
+            println("==>>>  Two...")
+        }
+        job.invokeOnCompletion {
+            println("==>>>  Complete.......")
+        }
+    }
+
+    private fun demoNine() {
+        val scope = CoroutineScope(Job())
+        val job = scope.launch {
+            launch {
+                delay(100)
+                println("==>>>  Hello One!!!")
+            }
+            println("==>>>  Two!!!!")
+        }
+
+        job.invokeOnCompletion {
+            println("==>>>  Complete!!!!")
+        }
+
+        scope.coroutineContext[Job]?.children?.forEach { _ ->
+            // launched job
+            println("==>>> $job count ${job.children.count()}")
+
+            // grandchildren
+            job.children.forEach { _ ->
+                println(" Grand Children ==>>> $job")
+            }
         }
     }
 }
