@@ -7,7 +7,7 @@ class RangeAndProgression: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        iteratorDemo()
+        mutableListIteratorDemo()
     }
 
     //rangeTo(..) and rangeUntil(..<) operator
@@ -48,5 +48,42 @@ class RangeAndProgression: AppCompatActivity() {
         numbers.forEach {
             println("==>> $it")
         }
+    }
+
+
+    //List iterator
+    private fun listIteratorDemo() {
+        val numbers = mutableListOf("One","Two","three","four","five")
+        numbers.also {
+            it.add("six")
+        }
+
+        val itr = numbers.listIterator()
+        while (itr.hasNext())
+            println("==>> Number : ${itr.next()}")
+
+        println("==>> ********** Iterating backwards **********")
+        while (itr.hasPrevious())
+            println("==>> Number : ${itr.previous()}")
+    }
+
+    //Mutable iterator
+
+    private fun mutableListIteratorDemo() {
+        val numbers = mutableListOf("One","Two","three","four","five")
+
+        val itr = numbers.iterator()
+
+        itr.next()
+        itr.remove()
+        println("==>> After removal : $numbers")
+
+        val itr1 = numbers.listIterator()
+        itr1.next()
+        itr1.add("New")
+        println("==>> After Addition : $numbers")
+
+        itr1.set("Hello")
+        println("==>> After replace : $numbers")
     }
 }
