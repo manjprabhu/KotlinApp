@@ -83,7 +83,10 @@ class RangeAndProgression: AppCompatActivity() {
         itr1.add("New")
         println("==>> After Addition : $numbers")
 
-        itr1.set("Hello")
-        println("==>> After replace : $numbers")
+//        itr1.set("Hello")
+//        println("==>> After replace : $numbers")
+
+        val x = setOf(1,2,3,4,1,5,5,5,5,8)
+        println("==>> x : $x")
     }
 }
