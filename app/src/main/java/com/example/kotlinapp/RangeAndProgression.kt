@@ -7,7 +7,7 @@ class RangeAndProgression: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        rangeOperator()
+        iteratorDemo()
     }
 
     //rangeTo(..) and rangeUntil(..<) operator
@@ -28,6 +28,25 @@ class RangeAndProgression: AppCompatActivity() {
 
         for(d in 10 downTo 1 step 2)
             println("==>> d : $d")
+    }
 
+    private fun iteratorDemo() {
+        val numbers = listOf("One","Two","three","four","five")
+
+        val itr = numbers.iterator()
+        while (itr.hasNext())
+            println("==>> Number : ${itr.next()}")
+
+        println("==>> ************************")
+        //another way using for loop
+
+        for(num in numbers)
+            println("==>> number : $num")
+
+        println("==>> ************************")
+
+        numbers.forEach {
+            println("==>> $it")
+        }
     }
 }
