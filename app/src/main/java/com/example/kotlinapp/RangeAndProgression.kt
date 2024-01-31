@@ -88,5 +88,9 @@ class RangeAndProgression: AppCompatActivity() {
 
         val x = setOf(1,2,3,4,1,5,5,5,5,8)
         println("==>> x : $x")
+
+        println("==>> ************************")
+        val setTwo = mutableSetOf("One","two","three", "one","One","ONE")
+        println("==>> y : $setTwo")
     }
 }
