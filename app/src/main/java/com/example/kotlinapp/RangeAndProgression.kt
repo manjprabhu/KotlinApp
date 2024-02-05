@@ -35,17 +35,17 @@ class RangeAndProgression : AppCompatActivity() {
 
         for (x in arr) {
             println("==>> x : $x")
-
         }
 
         println("==>> ************************")
-        for (y in arr.size-1 downTo 1) {
 
+        for (y in arr.size-1 downTo 1) {
             println("==>> y: $y")
             println("==>> ${arr[y]}")
         }
 
         println("==>> ************************")
+
         val k = 4
         for (i in 0..k) {
             println("==>> i :$i")
@@ -60,9 +60,18 @@ class RangeAndProgression : AppCompatActivity() {
             println("==>> ${arr[j]}")
         }
 
+        println("==>> ************************")
+        for(j2 in 0 until arr.size-1 step 2 ) {
+            println("==>>j2 :$j2")
+            println("==>> ${arr[j2]}")
+        }
 
+        println("==>> ************************")
 
-
+        for(k in arr.size-1 downTo 0 step 2) {
+            println("==>>k :$k")
+            println("==>> ${arr[k]}")
+        }
     }
 
     private fun iteratorDemo() {
