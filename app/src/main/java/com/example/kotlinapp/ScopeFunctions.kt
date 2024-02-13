@@ -113,7 +113,13 @@ class ScopeFunctions : AppCompatActivity() {
             println("==>> $name")
             println("==>> $age")
             "Person  $name is of age $age"
-        }
+        }?: "Person is NULL...."
         println("==>>R2:  $r2")
+
+        println("==>>*********************************")
+        var r3 = s2?.let {
+            it.name =  "John"
+        }?: "person is null..."
+        println("==>>R3:  $r3")
     }
 }
