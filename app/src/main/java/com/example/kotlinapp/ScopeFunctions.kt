@@ -100,16 +100,20 @@ class ScopeFunctions : AppCompatActivity() {
 
         println("==>>*********************************")
         var s2:person? = null
-        with(s2) {
+        val r1 = with(s2) {
             println("==>> ${this?.name}")
             println("==>> ${this?.age}")
+            "Person  ${this?.name } is of age ${this?.age}"
         }
+        println("==>>R1:  $r1")
 
         //instead of above null check here we can use "run"
         println("==>>*********************************")
-        s2?.run{
+        val r2 = s2?.run{
             println("==>> $name")
             println("==>> $age")
+            "Person  $name is of age $age"
         }
+        println("==>>R2:  $r2")
     }
 }
