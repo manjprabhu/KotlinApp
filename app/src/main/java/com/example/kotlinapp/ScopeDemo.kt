@@ -62,7 +62,7 @@ class ScopeDemo : AppCompatActivity() {
         println(" ==>>*************************")
     }
 
-    //We use GlobalScope to launch the coroutine. Here child coroutines (started with GlobalScope.Launch()) are global corutines
+    //We use GlobalScope to launch the coroutine. Here child coroutines (started with GlobalScope.Launch()) are global coroutines
     // and not in scope of runBLocking(), hence runblocking will not wait for the child coroutine completion..
     private fun performWorkGlobalScope() {
         val time = measureTimeMillis {

@@ -412,7 +412,7 @@ class CoroutineexceptionhandlerDemo : AppCompatActivity() {
     //Working...
     private fun supervisorJobExampleCorrectWay() {
         val handler = CoroutineExceptionHandler { _, exception ->
-            println("==>> Exception occured $exception")
+            println("==>> Exception occurred $exception")
         }
 
         CoroutineScope(Dispatchers.Main + handler).launch {
