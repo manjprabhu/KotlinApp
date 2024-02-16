@@ -15,7 +15,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        eight()
+        nine()
     }
 
     private fun demoMethod() {
@@ -213,5 +213,31 @@ class Demo : AppCompatActivity() {
             }
         }
         println("==>>> One")
+    }
+
+    private fun nine() {
+      /*  runBlocking {
+            var r: Int = nineWork()
+            println("==>> Result : $r")
+        }*/
+        lifecycleScope.launch {
+            val r: Int = nineWork()
+            println("==>> Result : $r")
+        }
+        println("==>> Completed.....")
+    }
+
+
+    //coroutineScope without launch{} or async{} is of no use, does not make difference
+    private  suspend fun nineWork():Int {
+        var result = 0
+        coroutineScope {
+            launch {
+                for(i in 1..10) {
+                    result+=i;
+                }
+            }
+        }
+        return result
     }
 }
