@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
@@ -15,7 +18,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        nine()
+        demoo()
     }
 
     private fun demoMethod() {
@@ -216,10 +219,10 @@ class Demo : AppCompatActivity() {
     }
 
     private fun nine() {
-      /*  runBlocking {
-            var r: Int = nineWork()
-            println("==>> Result : $r")
-        }*/
+        /*  runBlocking {
+              var r: Int = nineWork()
+              println("==>> Result : $r")
+          }*/
         lifecycleScope.launch {
             val r: Int = nineWork()
             println("==>> Result : $r")
@@ -229,15 +232,55 @@ class Demo : AppCompatActivity() {
 
 
     //coroutineScope without launch{} or async{} is of no use, does not make difference
-    private  suspend fun nineWork():Int {
+    private suspend fun nineWork(): Int {
         var result = 0
         coroutineScope {
             launch {
-                for(i in 1..10) {
-                    result+=i;
+                for (i in 1..10) {
+                    result += i;
                 }
             }
         }
         return result
+    }
+
+
+    private fun demoo() {
+        val state = MutableStateFlow(0)
+        lifecycleScope.launch {
+            repeat(5) {
+                delay(100)
+                state.value = it
+            }
+        }
+
+        lifecycleScope.launch {
+            state.collect { value ->
+                println("==>> $value")
+            }
+        }
+
+        val sharedFlow = MutableSharedFlow<Int>(replay = 5)
+
+        lifecycleScope.launch {
+            (10.. 50 ).forEach {
+                delay(100)
+                sharedFlow.emit(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            sharedFlow.collect {
+                println("==>> Collector One: $it")
+            }
+        }
+
+        println("==>> **************************")
+        lifecycleScope.launch {
+            delay(1000)
+            sharedFlow.collect {
+                println("==>> Collector Two:  $it")
+            }
+        }
     }
 }
