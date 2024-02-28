@@ -18,7 +18,8 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        demoo()
+        lateInitDemo()
+        lazyDemo()
     }
 
     private fun demoMethod() {
@@ -263,7 +264,7 @@ class Demo : AppCompatActivity() {
         val sharedFlow = MutableSharedFlow<Int>(replay = 5)
 
         lifecycleScope.launch {
-            (10.. 50 ).forEach {
+            (10..50).forEach {
                 delay(100)
                 sharedFlow.emit(it)
             }
@@ -282,5 +283,24 @@ class Demo : AppCompatActivity() {
                 println("==>> Collector Two:  $it")
             }
         }
+    }
+
+    //lateinit and lazy
+
+    data class User(var name: String = "ABC")
+
+    private fun lateInitDemo() {
+        lateinit var myUser: User
+
+        myUser = User("Test")
+
+        println("==>>  User: is  ${myUser.name}")
+    }
+
+    private fun lazyDemo() {
+        val myUser: User by lazy {
+            User("This lazy Testing")
+        }
+        println("==>> Lazy: ${myUser.name}")
     }
 }
