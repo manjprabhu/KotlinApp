@@ -298,9 +298,24 @@ class Demo : AppCompatActivity() {
     }
 
     private fun lazyDemo() {
+
+        //non - primitive type
         val myUser: User by lazy {
             User("This lazy Testing")
         }
         println("==>> Lazy: ${myUser.name}")
+
+        //primitive type
+        val counter:Int by lazy {
+            10
+        }
+        println("==>> Lazy: $counter")
+
+
+        //Nullable value
+        val nullableValue:String? by lazy {
+            null
+        }
+        println("==>> Lazy: $nullableValue")
     }
 }
