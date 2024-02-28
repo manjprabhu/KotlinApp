@@ -18,8 +18,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lateInitDemo()
-        lazyDemo()
+        extensionDemo()
     }
 
     private fun demoMethod() {
@@ -306,16 +305,51 @@ class Demo : AppCompatActivity() {
         println("==>> Lazy: ${myUser.name}")
 
         //primitive type
-        val counter:Int by lazy {
+        val counter: Int by lazy {
             10
         }
         println("==>> Lazy: $counter")
 
 
         //Nullable value
-        val nullableValue:String? by lazy {
+        val nullableValue: String? by lazy {
             null
         }
         println("==>> Lazy: $nullableValue")
+    }
+
+
+    private fun MutableList<Int>.swap(i: Int, j: Int): MutableList<Int> {
+        val temp = this[i]
+        this[i] = this[j]
+        this[j] = temp
+        return this
+    }
+
+    data class student(var name:String=  "Test") {
+        var marks:Int = 35
+
+        fun isPassed(marks:Int):Boolean{
+            return marks >35
+        }
+    }
+
+    private fun student.isFirstClass(marks:Int):Boolean {
+        return marks > 75
+    }
+
+
+    private fun extensionDemo() {
+        val list = mutableListOf(1, 2, 3, 4, 5, 6)
+        println("==>> Before swap : $list")
+        list.swap(3, 5)
+        println("==>> After swap $list")
+
+        val result  =student().isPassed(50)
+        println("==>> Result : $result")
+
+        val result1 = student().isFirstClass(34)
+        println("==>> Result1 : $result1")
+
     }
 }
