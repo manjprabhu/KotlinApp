@@ -3,6 +3,7 @@ package com.example.kotlinapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -18,7 +19,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        extensionDemo()
+        calculate()
     }
 
     private fun demoMethod() {
@@ -326,7 +327,7 @@ class Demo : AppCompatActivity() {
         return this
     }
 
-    data class student(var name:String=  "Test") {
+     class student {
         var marks:Int = 35
 
         fun isPassed(marks:Int):Boolean{
@@ -351,5 +352,48 @@ class Demo : AppCompatActivity() {
         val result1 = student().isFirstClass(34)
         println("==>> Result1 : $result1")
 
+    }
+
+    private fun dd() {
+        CoroutineScope(Job()).launch {
+            val result = task()
+            println("==>> Result : $result")
+        }
+    }
+
+    private suspend fun task() : Int {
+        var item = 0
+
+        coroutineScope {
+            launch {
+                (1..10).forEach { _ ->
+                    item++
+                }
+            }
+        }
+        return item
+    }
+
+
+    private fun calculate() {
+        lifecycleScope.launch {
+            for(i in 1..15) {
+                if(i==10) {
+                    println("==>> Bit tired take a break...")
+                    calculateWork()
+                } else {
+                    println("==>> $i")
+                }
+            }
+            println("==>> Waiting for completion........")
+        }
+        println("==>> Completed!!!")
+    }
+
+    private  suspend fun calculateWork() {
+        for(i in 16..26) {
+            println("==>> $i")
+            delay(1000)
+        }
     }
 }
