@@ -1,7 +1,10 @@
 package com.example.kotlinapp
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +22,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        calculate()
+        demo()
     }
 
     private fun demoMethod() {
@@ -327,15 +330,15 @@ class Demo : AppCompatActivity() {
         return this
     }
 
-     class student {
-        var marks:Int = 35
+    class student {
+        var marks: Int = 35
 
-        fun isPassed(marks:Int):Boolean{
-            return marks >35
+        fun isPassed(marks: Int): Boolean {
+            return marks > 35
         }
     }
 
-    private fun student.isFirstClass(marks:Int):Boolean {
+    private fun student.isFirstClass(marks: Int): Boolean {
         return marks > 75
     }
 
@@ -346,7 +349,7 @@ class Demo : AppCompatActivity() {
         list.swap(3, 5)
         println("==>> After swap $list")
 
-        val result  =student().isPassed(50)
+        val result = student().isPassed(50)
         println("==>> Result : $result")
 
         val result1 = student().isFirstClass(34)
@@ -361,7 +364,7 @@ class Demo : AppCompatActivity() {
         }
     }
 
-    private suspend fun task() : Int {
+    private suspend fun task(): Int {
         var item = 0
 
         coroutineScope {
@@ -377,8 +380,8 @@ class Demo : AppCompatActivity() {
 
     private fun calculate() {
         lifecycleScope.launch {
-            for(i in 1..15) {
-                if(i==10) {
+            for (i in 1..15) {
+                if (i == 10) {
                     println("==>> Bit tired take a break...")
                     calculateWork()
                 } else {
@@ -390,10 +393,41 @@ class Demo : AppCompatActivity() {
         println("==>> Completed!!!")
     }
 
-    private  suspend fun calculateWork() {
-        for(i in 16..26) {
+    private suspend fun calculateWork() {
+        for (i in 16..26) {
             println("==>> $i")
             delay(1000)
+        }
+    }
+
+    private fun demo() {
+        val st = student()
+
+        with(st) {
+            marks = 50
+            println("st : $this")
+            println("==>> ${isPassed(70)}")
+        }
+
+        val st1 = st.run {
+            marks = 70
+            println("$this")
+        }
+
+        println("==>> $st1")
+
+
+        var list = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8)
+            .also {
+                println("==>> Before $it")
+                it.add(10)
+            }.filter { it > 4 }
+
+
+        mutableListOf(1,2,3,4,5,6,7,8,9).apply {
+            this.filter { it > 3 }.let { list ->
+                println("==>> List : $list")
+            }
         }
     }
 }
