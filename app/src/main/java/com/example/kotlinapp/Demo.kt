@@ -423,11 +423,38 @@ class Demo : AppCompatActivity() {
                 it.add(10)
             }.filter { it > 4 }
 
+        println("=--==>> List : $list")
 
         mutableListOf(1,2,3,4,5,6,7,8,9).apply {
             this.filter { it > 3 }.let { list ->
                 println("==>> List : $list")
             }
+        }
+
+        val numbers = mutableListOf("One","Two","Three","Four","Five")
+        numbers.map {it.length}.filter { it > 3 }.let(::println)
+
+        numbers.map{ it.replaceRange(0,2,"qwe")}.filter { it.endsWith("e") }.let {
+            println("==>>> $it")
+        }
+
+        mutableListOf(1,2,3,4,5,6,7,8).also {
+            it.add(100)
+        }.filter { it > 2 }.let { println("===>>> $it") }
+
+        val gov = gov("India")
+
+        val govt = gov.run {
+            capital = " Delhi"
+        }
+        println("==>> Govt is : $govt")
+    }
+
+    class gov(name:String) {
+        private var tenure:Int  = 5
+        var capital:String =""
+        init {
+            println("==>> This is $name govt and its tenure is $tenure")
         }
     }
 }
