@@ -330,10 +330,10 @@ class Demo : AppCompatActivity() {
         return this
     }
 
-    class student {
+    open class student {
         var marks: Int = 35
 
-        fun isPassed(marks: Int): Boolean {
+        open fun isPassed(marks: Int): Boolean {
             return marks > 35
         }
     }
@@ -425,20 +425,20 @@ class Demo : AppCompatActivity() {
 
         println("=--==>> List : $list")
 
-        mutableListOf(1,2,3,4,5,6,7,8,9).apply {
+        mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9).apply {
             this.filter { it > 3 }.let { list ->
                 println("==>> List : $list")
             }
         }
 
-        val numbers = mutableListOf("One","Two","Three","Four","Five")
-        numbers.map {it.length}.filter { it > 3 }.let(::println)
+        val numbers = mutableListOf("One", "Two", "Three", "Four", "Five")
+        numbers.map { it.length }.filter { it > 3 }.let(::println)
 
-        numbers.map{ it.replaceRange(0,2,"qwe")}.filter { it.endsWith("e") }.let {
+        numbers.map { it.replaceRange(0, 2, "qwe") }.filter { it.endsWith("e") }.let {
             println("==>>> $it")
         }
 
-        mutableListOf(1,2,3,4,5,6,7,8).also {
+        mutableListOf(1, 2, 3, 4, 5, 6, 7, 8).also {
             it.add(100)
         }.filter { it > 2 }.let { println("===>>> $it") }
 
@@ -448,13 +448,45 @@ class Demo : AppCompatActivity() {
             capital = " Delhi"
         }
         println("==>> Govt is : $govt")
+
+        val arr = intArrayOf(1, 2, 3, 5, 7, 3, 5, 8, 9, 4, 4, 7, 9)
+        for (i in arr)
+            println(i)
+
+        for (i in arr.indices step 2)
+            println(arr[i])
+
+        for (i in arr.lastIndex downTo 1)
+            println(arr[i])
+
     }
 
-    class gov(name:String) {
-        private var tenure:Int  = 5
-        var capital:String =""
+    private fun functionOne() {
+        val pz = pizza.getPizza("tomato")
+
+    }
+
+    class gov(name: String) {
+        private var tenure: Int = 5
+        var capital: String = ""
+
         init {
             println("==>> This is $name govt and its tenure is $tenure")
+        }
+    }
+
+
+    // Factory pattern using companion object
+    class pizza(type: String) {
+        companion object Factory {
+            fun getPizza(tp: String): pizza {
+
+                return when (tp) {
+                    "abc" -> pizza("abc")
+                    "lmn" -> pizza("lmn")
+                    else -> pizza("default")
+                }
+            }
         }
     }
 }
