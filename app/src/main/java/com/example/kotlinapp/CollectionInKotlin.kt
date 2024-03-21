@@ -8,7 +8,7 @@ class CollectionInKotlin : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        methodFive()
+        methodSeven()
     }
 
     private fun methodOne() {
@@ -108,5 +108,22 @@ class CollectionInKotlin : AppCompatActivity() {
         }
         println("==>>********** TreeMap ******************")
         println("==>>> $map")
+    }
+
+    private fun methodSeven() {
+        val set = setOf(1,2,3,6,8,9,7,41,2,3,4)
+        println("==>> $set")
+
+        val mSet = mutableSetOf(1,2,4,6,8,92,3,4,5,6,7)
+
+        mSet.also {
+            mSet.add(19)
+            mSet.add(69)
+            mSet.add(19)
+            mSet.add(49)
+            mSet.add(79)
+        }
+        println("==>>******** MutableSet ***********")
+        println("==>>> $mSet")
     }
 }
