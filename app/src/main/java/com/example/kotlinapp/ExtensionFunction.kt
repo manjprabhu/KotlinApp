@@ -51,6 +51,19 @@ class ExtensionFunction : AppCompatActivity() {
         val newString = "Hello test"
         println("Result string : ${newString.removeFirstLastChar()}")
 
+        MyClass.printCompanion()
+
+    }
+
+
+    //Companion object extension
+    class MyClass {
+        companion object {
+        }
+    }
+
+    private fun MyClass.Companion.printCompanion() {
+        println("==>> Printing from companion!!!")
     }
 
 }

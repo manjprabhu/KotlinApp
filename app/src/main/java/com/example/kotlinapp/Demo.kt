@@ -22,7 +22,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        demo()
+        extensionDemo()
     }
 
     private fun demoMethod() {
@@ -336,12 +336,27 @@ class Demo : AppCompatActivity() {
         open fun isPassed(marks: Int): Boolean {
             return marks > 35
         }
+
+        fun sampleFunction() {
+            println("==>>> Sample function from MAIN")
+        }
+
+        companion object {
+
+        }
     }
 
     private fun student.isFirstClass(marks: Int): Boolean {
         return marks > 75
     }
 
+    private fun student.Companion.printCompanion() {
+        println("==>> Printing from companion !!!!")
+    }
+
+    private fun student.sampleFunction(str: String) {
+        println("==>> Sample function from EXTENSION...$str")
+    }
 
     private fun extensionDemo() {
         val list = mutableListOf(1, 2, 3, 4, 5, 6)
@@ -354,6 +369,11 @@ class Demo : AppCompatActivity() {
 
         val result1 = student().isFirstClass(34)
         println("==>> Result1 : $result1")
+
+        val st = student()
+        st.sampleFunction("Hello")
+
+        student.printCompanion()
 
     }
 
@@ -463,6 +483,7 @@ class Demo : AppCompatActivity() {
 
     private fun functionOne() {
         val pz = pizza.getPizza("tomato")
+
 
     }
 
