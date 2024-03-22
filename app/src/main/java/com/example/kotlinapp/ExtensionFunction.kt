@@ -8,7 +8,7 @@ class ExtensionFunction : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        demoExtensionFunction()
+        testExtension(ChildClass())
     }
 
     private fun AppUtils.exFunction(): Int {
@@ -64,6 +64,22 @@ class ExtensionFunction : AppCompatActivity() {
 
     private fun MyClass.Companion.printCompanion() {
         println("==>> Printing from companion!!!")
+    }
+
+
+    open class ParentClass {
+    }
+
+    class ChildClass : ParentClass() {
+    }
+
+    private fun ParentClass.getName() = "ParentClass!!!"
+
+    private fun ChildClass.getName() = "ChildClass!!!"
+
+    private fun testExtension(obj: ParentClass) {
+        val name = obj.getName()
+        println("==>> $name ")
     }
 
 }
