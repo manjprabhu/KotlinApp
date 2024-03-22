@@ -8,7 +8,7 @@ class CollectionInKotlin : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        methodSeven()
+        methodEight()
     }
 
     private fun methodOne() {
@@ -84,7 +84,7 @@ class CollectionInKotlin : AppCompatActivity() {
         println("==>>*************** LinkedHashMap ***************************")
         //println("==>>> $map")
 
-        val mapOne = linkedMapOf<String,Int>()
+        val mapOne = linkedMapOf<String, Int>()
 
         mapOne.also {
             it["three"] = 12
@@ -98,7 +98,7 @@ class CollectionInKotlin : AppCompatActivity() {
     }
 
     private fun methodFive() {
-        val map = TreeMap<String,Int>()
+        val map = TreeMap<String, Int>()
         map.also {
             it["three"] = 73
             it["one"] = 22
@@ -111,10 +111,10 @@ class CollectionInKotlin : AppCompatActivity() {
     }
 
     private fun methodSeven() {
-        val set = setOf(1,2,3,6,8,9,7,41,2,3,4)
+        val set = setOf(1, 2, 3, 6, 8, 9, 7, 41, 2, 3, 4)
         println("==>> $set")
 
-        val mSet = mutableSetOf(1,2,4,6,8,92,3,4,5,6,7)
+        val mSet = mutableSetOf(1, 2, 4, 6, 8, 92, 3, 4, 5, 6, 7)
 
         mSet.also {
             mSet.add(19)
@@ -125,5 +125,30 @@ class CollectionInKotlin : AppCompatActivity() {
         }
         println("==>>******** MutableSet ***********")
         println("==>>> $mSet")
+    }
+
+    private fun methodEight() {
+
+        val map = mutableMapOf<Int, Int>()
+
+        (0..10).forEach {
+            map[it] = it
+        }
+//        println("==>> ${map.entries}")
+
+        val hashMap = TreeMap<Int, Int>()
+
+        for (i in 25 downTo 1 step 2) {
+            hashMap[i] = i
+        }
+//        println("==>> ${hashMap.entries}")
+
+
+        val mMap = mutableMapOf(1 to 1, 2 to 3, 3 to 10, 5 to 23, 6 to 11).also {
+            for (i in 25 downTo 1 step 2) {
+                it[i] = i
+            }
+        }
+        println("==>> ${mMap.entries}")
     }
 }
