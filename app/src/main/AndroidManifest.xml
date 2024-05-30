@@ -12,7 +12,7 @@
         <activity
             android:name=".FlowBuilder"
             android:exported="false" />
-        <activity android:name=".interoperability.CompanionActivity">
+        <activity android:name=".Demo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

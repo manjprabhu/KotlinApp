@@ -1,14 +1,12 @@
 package com.example.kotlinapp
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +20,7 @@ class Demo : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        extensionDemo()
+        Eleven()
     }
 
     private fun demoMethod() {
@@ -509,5 +507,29 @@ class Demo : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun Eleven() {
+
+        lifecycleScope.launch {
+            val result = workEleven()
+            println("==>> Result : $result")
+        }
+    }
+
+    private suspend fun workEleven(): Int {
+        var result = 0
+        coroutineScope {
+            val resultOne = async {
+                delay(1000)
+                100
+            }
+            val resultTwo = async {
+                delay(2000)
+                200
+            }
+            result = resultOne.await() + resultTwo.await()
+        }
+        return result
     }
 }

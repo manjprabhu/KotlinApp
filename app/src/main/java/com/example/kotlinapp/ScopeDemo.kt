@@ -14,6 +14,15 @@ class ScopeDemo : AppCompatActivity() {
 
         GlobalScope.launch creates global coroutines.
         It is now developer’s responsibility to keep track of their lifetime.
+
+
+        Global scope is Coroutine scope that lives as long as application is alive, that means all the coroutine laucnhed inside GLobalscope
+        lives as long as app is alive, there is no way to cancel all the coroutine at one go. If we access the resources inside GlobalScope coroutine
+        which has longer lifetime than the Activity/Viewmodel , leads to memory leaks.
+
+
+        CoroutineScope we can create individual coroutineScope. This is the scope we can control, helpful in using custom compoement that has
+        lifecycle where we need corutine
     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
